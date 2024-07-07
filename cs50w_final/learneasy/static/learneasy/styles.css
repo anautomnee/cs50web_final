@@ -1,0 +1,144 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+body {
+    background-color: #FFFCF5;
+    color: #373375;
+    font-family: "Inter", sans-serif;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 12px 42px 42px 42px;
+}
+
+.main {
+    margin: 0 42px;
+}
+
+a {
+    color: #373375;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.login_form_container, .register_form_container {
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    height: calc(100vh - 182px);
+}
+
+#login_form, #register_form {
+    display: flex;
+    flex-direction: column;
+    margin: 16vh 0;
+    padding: 42px 24px;
+    height: fit-content;
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    border: 1px solid #373375;
+}
+
+#login_form h1, #register_form h1 {
+    margin-bottom: 12px;
+    align-self: center;
+}
+
+
+#login_form a, #register_form a {
+    font-size: 12px;
+    align-self: center;
+    margin-top: 12px;
+    text-decoration: underline;
+
+}
+
+#login_password_input, #login_username_input, #register_password_input, #register_username_input, #register_password_confirmation_input, #register_email_input {
+    padding-left: 8px;
+    border-radius: 8px;
+    height: 36px;
+    min-width: 240px;
+    border: 1px solid #373375;
+    margin-bottom: 12px;
+}
+
+#login_submit_btn, #register_submit_btn {
+    cursor: pointer;
+    background-color: #373375;
+    color: #FFFFFF;
+    height: 36px;
+    width: 100%;
+    padding: 6px 12px;
+    border-radius: 8px;
+    align-self: center;
+}
+
+.nav-left, .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 42px;
+    
+}
+
+.nav-left img {
+    width: 100px;
+}
+
+.recent-modules, .recent-texts {
+    display: flex;
+    flex-direction: column;
+    max-width: 1068px;
+    margin-bottom: 42px;
+}
+
+.recent-modules a, .recent-texts a {
+    align-self: flex-end;
+}
+
+.recent-modules-grid, .recent-texts-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 240px);
+    gap: 36px;
+}
+
+.module-small-card div, .texts-small-card div {
+    width: 240px;
+    height: 140px;
+    background-color: #BABDE2;
+    border-radius: 10px;
+    margin-bottom: 14px;
+}
+
+.groups_main_container {
+    max-width: 670px;
+    overflow: scroll;
+    margin-bottom: 42px;
+}
+
+.grops_main {
+    display: flex;
+    gap: 36px;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    background-color: #373375;
+    color: #FFFCF5;
+    padding: 24px 42px;
+}
