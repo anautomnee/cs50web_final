@@ -41,3 +41,9 @@ def register(request):
             })    
     else:
         return render(request, "learneasy/register.html")
+    
+
+def add_module(request):
+    if request.method == "POST":
+        return redirect("index")
+    return render(request, "learneasy/add_module.html")
