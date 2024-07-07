@@ -156,6 +156,19 @@ footer {
     background-color: #FFFCF5;
     border: none;
     border-bottom: 1px solid #373375;
+    color: #373375;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 4px 8px;
+}
+
+.new_module_name input:focus {
+    outline:none;
+}
+
+.new_module_name input::placeholder {
+    font-size: 14px;
+    font-weight: 400;
 }
 
 .new_module_cards_container {
@@ -166,24 +179,43 @@ footer {
     margin-bottom: 64px;
 }
 
+.new_module_cards_container span {
+    cursor: pointer;
+}
+
 .new_module_card_container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #BABDE2;
-    padding: 20px;
+    padding: 48px 24px;
     width: 100%;
+    border-radius: 10px;
 }
 
 .textareas_container {
     display: flex;
-    gap: 20px;
+    gap: 64px;
     justify-content: center;
     width: 95%;
 }
 
 .textareas_container textarea {
     width: 100%;
+    min-height: 1.2rem;
+    resize: none;
+    overflow: hidden;
+    background-color: #BABDE2;
+    color: #373375;
+    border: none;
+    border-bottom: 1px solid #373375;
+    font-size: 16px;
+    font-weight: 500;
+    resize: none;
+}
+
+.textareas_container textarea:focus {
+    outline: none;
 }
 
 .textareas_container label {
@@ -191,5 +223,11 @@ footer {
 }
 
 .term, .definition {
-    width: 46%;
+    width: 42%;
+}
+
+.add_card_container {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
 }
