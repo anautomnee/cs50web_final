@@ -10,18 +10,18 @@ class Group(models.Model):
 
 class Module(models.Model):
     module_name = models.CharField(max_length=64)
-    model_group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="model_groups")
+    model_group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="group_modules")
     module_owner = models.ForeignKey(User, on_delete=models.CASCADE,  related_name="user_modules")
 
 class Text(models.Model):
     text_name = models.CharField(max_length=64)
-    text_group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="text_groups")
+    text_group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="group_texts")
     text_owner = models.ForeignKey(User, on_delete=models.CASCADE,  related_name="user_texts")
 
 class Card(models.Model):
     term = models.CharField(max_length=48)
     definition = models.CharField(max_length=128)
-    card_module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name="card_module")
+    card_module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name="module_cards")
 
 
     
