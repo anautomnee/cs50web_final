@@ -143,6 +143,10 @@ footer {
     padding: 24px 42px;
 }
 
+
+/* NEW MODULE PAGE */
+
+
 .new_module_name {
     display: flex;
     flex-direction: column;
@@ -237,4 +241,11 @@ footer {
     display: flex;
     align-items: center;
     font-weight: 500;
+}
+
+
+/* MODULE VIEW PAGE */
+
+#module_header {
+    margin-bottom: 42px;
 }

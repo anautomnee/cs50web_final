@@ -8,4 +8,5 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("logout", views.logout_view, name="logout"),
     path("add_module", views.add_module, name="add_module"),
+    path("module/<int:id>", views.module, name="module"),
 ]

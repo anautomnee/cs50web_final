@@ -1,0 +1,24 @@
+{% extends "learneasy/layout.html" %}
+{% load static %}
+
+{% block main %}
+    <div class="main">
+        <h1 id="module_header">{{ module.module_name }} </h1>
+        <div class="module_top">
+            <div class="preview_card_container">
+                <div class="preview_card">
+
+                </div>
+                <div class="preview_card_controls"></div>
+            </div>
+            <div class="learn_types_container">
+                <h2>Learn this module</h2>
+                <p>Match</p>
+                <p>Spell</p>
+                <p>Quiz</p>
+                <p><img src="{% static 'learneasy/mdi_magic.png' %}" alt="surprise_icon"> Surprise me</p>
+            </div>
+        </div>
+        <h1>{{ cards_count }} cards in this module</h1>
+    </div>
+{% endblock %}

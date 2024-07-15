@@ -10,6 +10,12 @@
                     <div></div>
                     <h3><a href="{% url 'add_module' %}">Create a new module</a></h3>
                 </div>
+                {% for module in modules %}
+                    <div class="module-small-card">
+                        <div></div>
+                        <h3><a href="{% url 'module' module.id %}">{{ module.module_name }}</a></h3>
+                    </div>
+                {% endfor %}
             </div>
         </div>
         <h1>Recent texts</h1>

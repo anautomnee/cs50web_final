@@ -1,9 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from .models import User
+from .models import User, Group, Module, Text, Card
 
 def index(request):
-    return render(request, "learneasy/index.html")
+    current_user = User.objects.get(username=request.user.username)
+    user_modules = current_user.user_modules.all()
+    return render(request, "learneasy/index.html", {
+        "modules": user_modules
+    })
 
 def login_view(request):
     if request.method == "POST":
@@ -45,5 +49,39 @@ def register(request):
 
 def add_module(request):
     if request.method == "POST":
+        current_user = User.objects.get(username=request.user.username)
+        module_name = ''
+        new_module = ''
+        new_term = ''
+        new_def = ''
+        for key, value in request.POST.items():
+            if key != 'csrfmiddlewaretoken' and value:
+                if key == 'new_module_name':
+                    module_name = value
+                    new_module = Module(module_name=module_name, module_owner=current_user)
+                    new_module.save()
+                    continue
+                if key.startswith('term'):
+                    new_term = value
+                    continue
+                if key.startswith('def'):
+                    new_def = value
+                    new_card = Card(term=new_term, definition=new_def, card_module=new_module)
+                    new_card.save()
+                
         return redirect("index")
     return render(request, "learneasy/add_module.html")
+
+def module(request, id):
+    current_module = Module.objects.get(id=id)
+    if current_module.module_owner.username != request.user.username:
+        return render(request, "learneasy/error.html")
+    
+    cards = current_module.module_cards.all()
+    cards_count = len(cards)
+    return render(request, "learneasy/module.html", {
+        "module": current_module,
+        "cards": cards,
+        "cards_count": cards_count
+    })
+    

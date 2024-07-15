@@ -3,7 +3,9 @@
 {% block main %}
     <div class="main">
         <h1>Create a new module</h1>
-        <form action="" method="post">
+        <form action="{% url 'add_module' %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Create module">
             <div class="new_module_name">
                 <label for="new_module_name">Module name:</label>
                 <input type="text" name="new_module_name" id="new_module_name" placeholder="E.g My new module">

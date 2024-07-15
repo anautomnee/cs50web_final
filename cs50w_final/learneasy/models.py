@@ -10,7 +10,7 @@ class Group(models.Model):
 
 class Module(models.Model):
     module_name = models.CharField(max_length=64)
-    model_group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="group_modules")
+    model_group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="group_modules", null=True)
     module_owner = models.ForeignKey(User, on_delete=models.CASCADE,  related_name="user_modules")
 
 class Text(models.Model):
