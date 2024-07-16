@@ -8,15 +8,34 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const new_module_cards_container = document.querySelector('.new_module_cards_container');
     const add_card_container = document.querySelector('.add_card_container');
-    add_card_container.addEventListener('click', () => {
-        const new_card_num = new_module_cards_container.childNodes.length;
-        create_new_card(new_module_cards_container, new_card_num);
-    });
+    if (add_card_container) {
+        add_card_container.addEventListener('click', () => {
+            const new_card_num = new_module_cards_container.childNodes.length;
+            create_new_card(new_module_cards_container, new_card_num);
+        });
+    }
 
     // Delete cards
     const delete_icons = document.querySelectorAll('.delete_card_icon');
-    for (const icon of delete_icons) {
-        icon.addEventListener('click', () => deleteCard(icon));
+    if (delete_icons) {
+        for (const icon of delete_icons) {
+            icon.addEventListener('click', () => deleteCard(icon));
+        }
+    }
+
+    // Flip card
+    const flip_card = document.querySelector('.flip_card');
+    if (flip_card) {
+        const flip_card_inner = document.querySelector('.flip_card_inner');
+        flip_card.addEventListener('click', () => {
+            if (flip_card_inner.classList.contains('rotated')) {
+                console.log('check')
+                flip_card_inner.classList.remove('rotated');
+                flip_card_inner.style.transform = 'rotateX(0deg)';
+            }
+            flip_card_inner.style.transform = 'rotateX(180deg)';
+            flip_card_inner.classList.toggle('rotated');
+        })
     }
 });
 

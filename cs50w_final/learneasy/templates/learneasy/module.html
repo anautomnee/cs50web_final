@@ -6,10 +6,35 @@
         <h1 id="module_header">{{ module.module_name }} </h1>
         <div class="module_top">
             <div class="preview_card_container">
-                <div class="preview_card">
-
+                <div class="flip_card">
+                    <div class="flip_card_inner">
+                        <div class="preview_card">
+                            {% for card in page_obj %}
+                                <p id="preview_card_font">{{ card.term }}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="preview_card_back">
+                            {% for card in page_obj %}
+                                <p id="preview_card_font">{{ card.definition }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-                <div class="preview_card_controls"></div>
+                <div class="preview_card_controls">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#373375"><path d="M384-96 0-480l384-384 68 68-316 316 316 316-68 68Z"/></svg></a>
+                    {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#D9D9D9"><path d="M384-96 0-480l384-384 68 68-316 316 316 316-68 68Z"/></svg>
+                    {% endif %}
+
+                    <p>{{ page_obj.number }}/{{ page_obj.paginator.num_pages }}</p>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#373375"><path d="m288-96-68-68 316-316-316-316 68-68 384 384L288-96Z"/></svg></a>
+                    {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#D9D9D9"><path d="m288-96-68-68 316-316-316-316 68-68 384 384L288-96Z"/></svg>
+                    {% endif %}
+                </div>
             </div>
             <div class="learn_types_container">
                 <h2>Learn this module</h2>
@@ -19,6 +44,22 @@
                 <p><img src="{% static 'learneasy/mdi_magic.png' %}" alt="surprise_icon"> Surprise me</p>
             </div>
         </div>
-        <h1>{{ cards_count }} cards in this module</h1>
+        <h1 id="module_cards_header">{{ cards_count }} cards in this module</h1>
+        <div class="module_edit_container">
+            <p>Edit module</p>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#373375"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h357l-80 80H200v560h560v-278l80-80v358q0 33-23.5 56.5T760-120H200Zm280-360ZM360-360v-170l367-367q12-12 27-18t30-6q16 0 30.5 6t26.5 18l56 57q11 12 17 26.5t6 29.5q0 15-5.5 29.5T897-728L530-360H360Zm481-424-56-56 56 56ZM440-440h56l232-232-28-28-29-28-231 231v57Zm260-260-29-28 29 28 28 28-28-28Z"/></svg>
+        </div>
+        <div class="module_cards_container">
+            {% for card in cards %}
+                <div class="term_and_def_container">
+                    <div class="module_card_container">
+                        <h2>{{ card.term }}</h2>
+                    </div>
+                    <div class="module_card_container">
+                        <h2>{{ card.definition }}</h2>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

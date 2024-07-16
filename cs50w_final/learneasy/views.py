@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .models import User, Group, Module, Text, Card
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
+@login_required
 def index(request):
     current_user = User.objects.get(username=request.user.username)
     user_modules = current_user.user_modules.all()
@@ -47,6 +50,7 @@ def register(request):
         return render(request, "learneasy/register.html")
     
 
+@login_required
 def add_module(request):
     if request.method == "POST":
         current_user = User.objects.get(username=request.user.username)
@@ -72,6 +76,7 @@ def add_module(request):
         return redirect("index")
     return render(request, "learneasy/add_module.html")
 
+@login_required
 def module(request, id):
     current_module = Module.objects.get(id=id)
     if current_module.module_owner.username != request.user.username:
@@ -79,9 +84,14 @@ def module(request, id):
     
     cards = current_module.module_cards.all()
     cards_count = len(cards)
+    paginator = Paginator(cards, 1)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "learneasy/module.html", {
         "module": current_module,
         "cards": cards,
-        "cards_count": cards_count
+        "cards_count": cards_count,
+        "page_obj": page_obj
     })
     
