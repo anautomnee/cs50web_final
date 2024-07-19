@@ -152,13 +152,13 @@ footer {
 /* NEW MODULE PAGE */
 
 
-.new_module_name {
+.new_module_name, .new_group_name {
     display: flex;
     flex-direction: column;
     margin: 20px 0;
 }
 
-.new_module_name input {
+.new_module_name input, .new_group_name input {
     margin-top: 10px;
     max-width: 400px;
     height: 32px;
@@ -171,11 +171,11 @@ footer {
     padding: 4px 8px;
 }
 
-.new_module_name input:focus {
+.new_module_name input:focus, .new_group_name input:focus {
     outline:none;
 }
 
-.new_module_name input::placeholder {
+.new_module_name input::placeholder, .new_group_name input::placeholder {
     font-size: 14px;
     font-weight: 400;
 }
@@ -358,4 +358,14 @@ footer {
 
 .module_cards_container {
     margin-bottom: 36px;
+}
+
+/*     GROUPS     */
+
+#add_group_submit_btn {
+    background-color: #BABDE2;
+    color: #FFFCF5;
+    padding: 12px 21px;
+    border-radius: 6px;
+    border: 1px solid #373375;
 }

@@ -76,7 +76,7 @@ def add_module(request):
         return redirect("index")
     return render(request, "learneasy/add_module.html")
 
-@login_required
+# @login_required
 def module(request, id):
     current_module = Module.objects.get(id=id)
     if current_module.module_owner.username != request.user.username:
@@ -94,4 +94,33 @@ def module(request, id):
         "cards_count": cards_count,
         "page_obj": page_obj
     })
+
+@login_required
+def add_group(request):
+    current_user = User.objects.get(username=request.user.username)
+    if request.method == "POST":
+        group_name = ''
+        new_group = ''
+
+        for key, value in request.POST.items():
+            if key != 'csrfmiddlewaretoken' and value:
+                group_name = value
+                new_group = Module(group_name=group_name, group_owner=current_user)
+                new_group.save()
+
+        return redirect("index")
+
+    user_modules = current_user.user_modules.all()
+    return render(request, "learneasy/add_group.html", {
+        "user_modules": user_modules
+    })
     
+# @login_required
+# def group(request, id):
+#     current_group = Group.objects.get(id=id)
+#     if current_group.group_owner.username != request.user.username:
+#         return render(request, "learneasy/error.html")
+
+#     return render(request, "learneasy/group.html", {
+#         "group": group
+#     })
