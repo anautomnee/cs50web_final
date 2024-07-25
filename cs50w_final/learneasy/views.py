@@ -8,8 +8,10 @@ from django.core.paginator import Paginator
 def index(request):
     current_user = User.objects.get(username=request.user.username)
     user_modules = current_user.user_modules.all()
+    user_groups = current_user.user_groups.all()
     return render(request, "learneasy/index.html", {
-        "modules": user_modules
+        "modules": user_modules,
+        "groups": user_groups
     })
 
 def login_view(request):
@@ -105,7 +107,7 @@ def add_group(request):
         for key, value in request.POST.items():
             if key != 'csrfmiddlewaretoken' and value:
                 group_name = value
-                new_group = Module(group_name=group_name, group_owner=current_user)
+                new_group = Group(group_name=group_name, group_owner=current_user)
                 new_group.save()
 
         return redirect("index")
@@ -115,12 +117,12 @@ def add_group(request):
         "user_modules": user_modules
     })
     
-# @login_required
-# def group(request, id):
-#     current_group = Group.objects.get(id=id)
-#     if current_group.group_owner.username != request.user.username:
-#         return render(request, "learneasy/error.html")
+@login_required
+def group(request, id):
+    current_group = Group.objects.get(id=id)
+    if current_group.group_owner.username != request.user.username:
+        return render(request, "learneasy/error.html")
 
-#     return render(request, "learneasy/group.html", {
-#         "group": group
-#     })
+    return render(request, "learneasy/group.html", {
+        "group": current_group
+    })

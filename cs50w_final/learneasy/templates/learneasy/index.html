@@ -1,38 +1,57 @@
-{% extends "learneasy/layout.html" %}
-
-{% block main %}
-    <div class="main">
-        <h1>Recent modules</h1>
-        <div class="recent-modules">
-            <a href="#">See all modules</a>
-            <div class="recent-modules-grid">
-                <div class="module-small-card">
-                    <div></div>
-                    <h3><a href="{% url 'add_module' %}">Create a new module</a></h3>
-                </div>
-                {% for module in modules %}
-                    <div class="module-small-card">
-                        <div></div>
-                        <h3><a href="{% url 'module' module.id %}">{{ module.module_name }}</a></h3>
-                    </div>
-                {% endfor %}
-            </div>
+{% extends "learneasy/layout.html" %} {% block main %}
+<div class="main">
+  <h1>Recent modules</h1>
+  <div class="recent-modules">
+    <a href="#">See all modules</a>
+    <div class="recent-modules-grid">
+      <a href="{% url 'add_module' %}">
+        <div class="module-small-card">
+          <div></div>
+          <h3>Create a module</h3>
         </div>
-        <h1>Recent texts</h1>
-        <div class="recent-texts">
-            <a href="#">See all texts</a>
-            <div class="recent-texts-grid">
-                <div class="texts-small-card">
-                    <div></div>
-                    <h3>Create a new text</h3>
-                </div>
-            </div>
+      </a>
+      {% for module in modules %}
+      <a href="{% url 'module' module.id %}">
+        <div class="module-small-card">
+          <div></div>
+          <h3>
+            <p class="recent-module-name">{{ module.module_name }}</p>
+          </h3>
         </div>
-        <h1>Groups</h1>
-        <div class="groups_main_container">
-            <div class="groups_main">
-                <p><a href="">Create a new group</a></p>
-            </div>
-        </div>
+      </a>
+      {% endfor %}
     </div>
+  </div>
+  <h1>Recent texts</h1>
+  <div class="recent-texts">
+    <a href="#">See all texts</a>
+    <div class="recent-texts-grid">
+      <div class="texts-small-card">
+        <div></div>
+        <h3>Create a text</h3>
+      </div>
+    </div>
+  </div>
+  <h1>Groups</h1>
+  <div class="groups_main_container">
+    <div class="groups_main">
+      <a href="{% url 'add_group' %}">
+        <div class="group-card">
+          <div></div>
+          <h3>Create a group</h3>
+        </div>
+      </a>
+      {% for group in groups %}
+      <a href="{% url 'group' group.id %}">
+        <div class="group-card">
+          <div></div>
+          <h3>
+            <p class="recent-group-name">{{ group.group_name }}</p>
+          </h3>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
 {% endblock %}

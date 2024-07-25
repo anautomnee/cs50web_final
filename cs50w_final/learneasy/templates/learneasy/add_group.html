@@ -1,20 +1,23 @@
-{% extends "learneasy/layout.html" %}
-
-{% block main %}
-    <div class="main">
-        <h1>Create a new group</h1>
-        <form action="{% url 'add_group' %}" method="post">
-            {% csrf_token %}
-            <div class="new_group_name">
-                <label for="new_group_name">Module name:</label>
-                <input type="text" name="new_group_name" id="new_group_name" placeholder="E.g My new group">
-            </div>
-            <select name="user_modules_select" id="user_modules_select" multiple>
-                {% for module in user_modules %}
-                    <option value="">{{ module.module_name }}</option>
-                {% endfor %}
-            </select>
-            <button type="submit" id="add_group_submit_btn"></button>
-        </form>
+{% extends "learneasy/layout.html" %} {% block main %}
+<div class="main">
+  <h1>Create a new group</h1>
+  <form action="{% url 'add_group' %}" method="post">
+    {% csrf_token %}
+    <div class="new_group_name">
+      <label for="new_group_name">Module name:</label>
+      <input
+        type="text"
+        name="new_group_name"
+        id="new_group_name"
+        placeholder="E.g My new group"
+      />
     </div>
+    <select name="user_modules_select" id="user_modules_select" multiple>
+      {% for module in user_modules %}
+      <option value="">{{ module.module_name }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" id="add_group_submit_btn">Add group</button>
+  </form>
+</div>
 {% endblock %}
