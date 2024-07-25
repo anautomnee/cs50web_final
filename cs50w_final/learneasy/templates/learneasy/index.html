@@ -33,24 +33,28 @@
     </div>
   </div>
   <h1>Groups</h1>
-  <div class="groups_main_container">
-    <div class="groups_main">
-      <a href="{% url 'add_group' %}">
-        <div class="group-card">
-          <div></div>
-          <h3>Create a group</h3>
-        </div>
-      </a>
-      {% for group in groups %}
-      <a href="{% url 'group' group.id %}">
-        <div class="group-card">
-          <div></div>
-          <h3>
-            <p class="recent-group-name">{{ group.group_name }}</p>
-          </h3>
-        </div>
-      </a>
-      {% endfor %}
+  <div class="groups_div">
+    <div id="blur_edge_left"></div>
+    <div id="blur_edge_right"></div>
+    <div class="groups_main_container">
+      <div class="groups_main">
+        <a href="{% url 'add_group' %}">
+          <div class="group-card">
+            <div></div>
+            <h3>Create a group</h3>
+          </div>
+        </a>
+        {% for group in groups %}
+        <a href="{% url 'group' group.id %}">
+          <div class="group-card">
+            <div></div>
+            <h3>
+              <p class="recent-group-name">{{ group.group_name }}</p>
+            </h3>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
     </div>
   </div>
 </div>
