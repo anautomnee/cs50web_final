@@ -106,9 +106,7 @@ def add_group(request):
 
         for key, value in request.POST.items():
             if key != 'csrfmiddlewaretoken' and value:
-                group_name = value
-                new_group = Group(group_name=group_name, group_owner=current_user)
-                new_group.save()
+                print(f"Key: {key}, value: {value}")
 
         return redirect("index")
 
@@ -126,3 +124,21 @@ def group(request, id):
     return render(request, "learneasy/group.html", {
         "group": current_group
     })
+
+
+@login_required
+def add_text(request):
+    current_user = User.objects.get(username=request.user.username)
+    if request.method == "POST":
+        text_name = ''
+        new_text = ''
+
+        for key, value in request.POST.items():
+            if key != 'csrfmiddlewaretoken' and value:
+                text_name = value
+                new_text = Group(text_name=text_name, text_owner=current_user)
+                new_text.save()
+
+        return redirect("index")
+
+    return render(request, "learneasy/add_text.html")

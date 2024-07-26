@@ -14,10 +14,10 @@
     </div>
     <select name="user_modules_select" id="user_modules_select" multiple>
       {% for module in user_modules %}
-      <option value="">{{ module.module_name }}</option>
+      <option value="{{ module.module_name }}">{{ module.module_name }}</option>
       {% endfor %}
     </select>
-    <button type="submit" id="add_group_submit_btn">Add group</button>
+    <button type="submit" class="add_submit_btn">Add group</button>
   </form>
 </div>
 {% endblock %}

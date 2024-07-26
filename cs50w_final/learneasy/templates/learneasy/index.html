@@ -26,10 +26,12 @@
   <div class="recent-texts">
     <a href="#">See all texts</a>
     <div class="recent-texts-grid">
-      <div class="texts-small-card">
-        <div></div>
-        <h3>Create a text</h3>
-      </div>
+      <a href="{% url 'add_text' %}">
+        <div class="module-small-card">
+          <div></div>
+          <h3>Create a text</h3>
+        </div>
+      </a>
     </div>
   </div>
   <h1>Groups</h1>

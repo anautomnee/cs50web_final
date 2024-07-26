@@ -1,0 +1,20 @@
+{% extends "learneasy/layout.html" %} {% block main %}
+<div class="main">
+  <h1>Create a new text</h1>
+  <form action="{% url 'add_text' %}" method="post" id="new_text_form">
+    {% csrf_token %}
+    <div class="new_text_name">
+      <label for="new_text_name">Text name:</label>
+      <input
+        type="text"
+        name="new_text_name"
+        id="new_text_name"
+        placeholder="E.g My new text"
+      />
+    </div>
+    <textarea name="new_text_content" id="new_text_content"></textarea>
+    <button type="submit" class="add_submit_btn">Add group</button>
+    <br />
+  </form>
+</div>
+{% endblock %}
