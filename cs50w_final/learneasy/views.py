@@ -1,17 +1,24 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse
 from .models import User, Group, Module, Text, Card
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from .forms import TextForm
+import deepl
+from .config import deepl_key
+import json
 
 @login_required
 def index(request):
     current_user = User.objects.get(username=request.user.username)
-    user_modules = current_user.user_modules.all()
+    user_modules = current_user.user_modules.all()[:3]
     user_groups = current_user.user_groups.all()
+    user_texts = current_user.user_texts.all()[:3]
     return render(request, "learneasy/index.html", {
         "modules": user_modules,
-        "groups": user_groups
+        "groups": user_groups,
+        "texts": user_texts
     })
 
 def login_view(request):
@@ -130,15 +137,56 @@ def group(request, id):
 def add_text(request):
     current_user = User.objects.get(username=request.user.username)
     if request.method == "POST":
-        text_name = ''
-        new_text = ''
+        form = TextForm(request.POST)
+        if form.is_valid():
+            text_name = form.cleaned_data["text_name"]
+            text_content = form.cleaned_data["text_content"]
+            new_text = Text(text_name=text_name, text_content=text_content, text_owner=current_user)
+            new_text.save()
+            return redirect("index")
 
-        for key, value in request.POST.items():
-            if key != 'csrfmiddlewaretoken' and value:
-                text_name = value
-                new_text = Group(text_name=text_name, text_owner=current_user)
-                new_text.save()
+    form = TextForm()
+    return render(request, "learneasy/add_text.html", {
+        "form": form 
+    })
 
-        return redirect("index")
+@login_required
+def text(request, id):
+    current_user = User.objects.get(username=request.user.username)
+    user_modules = current_user.user_modules.all()
+    current_text = Text.objects.get(id=id)
+    if current_text.text_owner.username != request.user.username:
+        return render(request, "learneasy/error.html")
 
-    return render(request, "learneasy/add_text.html")
+    return render(request, "learneasy/text.html", {
+        "text": current_text,
+        "modules": user_modules
+    })
+
+@login_required
+def translate(request):
+    if request.method == "POST":
+        auth_key = deepl_key
+        data = json.loads(request.body)["text"]
+        translator = deepl.Translator(auth_key)
+        result = translator.translate_text(data, target_lang="DE")
+        return HttpResponse(result)
+    
+    return render(request, "learneasy/error.html")
+
+@login_required
+def add_new_card(request):
+    if request.method == "POST":
+        term = json.loads(request.body)["term"]
+        definition = json.loads(request.body)["def"]
+        module = json.loads(request.body)["module"]
+        print(module)
+        current_module = Module.objects.get(module_name=module)
+        new_card = Card(term=term, definition=definition, card_module=current_module)
+        new_card.save()
+        try:
+            return HttpResponse("Added card")
+        except:
+            print("An exception occurred")
+    
+    return render(request, "learneasy/error.html")

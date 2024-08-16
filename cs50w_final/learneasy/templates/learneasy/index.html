@@ -32,6 +32,16 @@
           <h3>Create a text</h3>
         </div>
       </a>
+      {% for text in texts %}
+      <a href="{% url 'text' text.id %}">
+        <div class="module-small-card">
+          <div></div>
+          <h3>
+            <p class="recent-module-name">{{ text.text_name }}</p>
+          </h3>
+        </div>
+      </a>
+      {% endfor %}
     </div>
   </div>
   <h1>Groups</h1>

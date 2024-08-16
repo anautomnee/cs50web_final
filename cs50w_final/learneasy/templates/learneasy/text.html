@@ -1,0 +1,23 @@
+{% extends "learneasy/layout.html" %} {% block main %}
+<div class="main">
+  <h1>{{ text.text_name }}</h1>
+  <div class="text_container">
+    <div class="left_text_container">
+      <span class="text_content">{{ text.text_content }}</span>
+    </div>
+    <div class="right_text_container">
+      <h4>Add new words</h4>
+      <select name="text_modules_select" id="text_modules_select">
+        <option value="">--Please choose a module--</option>
+        {% for module in modules %}
+        <option value="{{ module.module_name }}">
+          {{ module.module_name }}
+        </option>
+        {% endfor %}
+      </select>
+      <div class="added_cards_container"></div>
+      <div class="added_cards_btn_container"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

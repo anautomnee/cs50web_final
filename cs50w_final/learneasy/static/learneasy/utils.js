@@ -1,6 +1,5 @@
 window.addEventListener("DOMContentLoaded", () => {
   // Autogrow textarea
-
   autogrow_textarea();
 
   // Add card
@@ -48,6 +47,82 @@ window.addEventListener("DOMContentLoaded", () => {
     scroll_container.addEventListener("scroll", () =>
       scrollBlurGroups(scroll_container, blur_left, blur_right)
     );
+  }
+
+  // Divide text to words
+
+  const text_content = document.querySelector(".text_content");
+  if (text_content) {
+    const textArray = text_content.textContent.split(" ");
+    text_content.textContent = "";
+    textArray.forEach((el, ind) => {
+      const wordSpan = document.createElement("span");
+      wordSpan.classList.add("translatable_item");
+      wordSpan.textContent = el;
+      text_content.append(wordSpan);
+      if (ind !== textArray.length - 1) {
+        const spaceSpan = document.createElement("span");
+        spaceSpan.textContent = " ";
+        text_content.append(spaceSpan);
+      }
+    });
+  }
+
+  // Words translation popover
+  let module_selected_for_translation = false;
+  let cards_from_text = false;
+  const translatable_item_array =
+    document.querySelectorAll(".translatable_item");
+  for (word of translatable_item_array) {
+    word.addEventListener("click", (ev) => {
+      const text = ev.target.textContent.replace(/[^a-zA-Z-]+/g, "");
+      let translation = "";
+      translateText(text).then((data) => {
+        translation = data;
+
+        const translation_popover = document.querySelector(
+          "#translation_popover"
+        );
+        const rect = ev.target.getBoundingClientRect();
+        if (translation_popover) {
+          translation_popover.remove();
+          const popover = createPopover(
+            text_content,
+            text,
+            translation,
+            module_selected_for_translation
+          );
+          popover.style.top = `${rect.bottom}px`;
+          popover.style.left = `${rect.right}px`;
+        } else {
+          const popover = createPopover(
+            text_content,
+            text,
+            translation,
+            module_selected_for_translation
+          );
+          popover.style.top = `${rect.bottom}px`;
+          popover.style.left = `${rect.right}px`;
+        }
+      });
+    });
+  }
+
+  // Select module for adding word
+  const text_modules_select = document.querySelector("#text_modules_select");
+  if (text_modules_select) {
+    text_modules_select.addEventListener("change", () => {
+      if (text_modules_select.value) {
+        module_selected_for_translation = true;
+        const translation_popover = document.querySelector(
+          "#translation_popover"
+        );
+        if (translation_popover) {
+          const btn = document.querySelector("#add_translation");
+          btn.disabled = false;
+        }
+      }
+    });
   }
 });
 
@@ -108,6 +183,21 @@ function autogrow_textarea() {
   });
 }
 
+function create_mini_card(parentDiv, term, def) {
+  const mini_card_container = document.createElement("div");
+  const term_par = document.createElement("p");
+  const def_par = document.createElement("p");
+  const divider = document.createElement("p");
+
+  parentDiv.append(mini_card_container);
+  mini_card_container.classList.add("mini_card_container");
+  mini_card_container.append(term_par, divider, def_par);
+
+  term_par.textContent = term;
+  def_par.textContent = def;
+  divider.innerHTML = "—————";
+}
+
 function deleteCard(icon) {
   const card = icon.parentElement;
   const textarea_term =
@@ -139,4 +229,116 @@ function scrollBlurGroups(container, left, right) {
   } else if (container.scrollLeft < 5) {
     left.hidden = true;
   }
+}
+
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === name + "=") {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+async function translateText(text) {
+  try {
+    const response = await fetch(`/translate`, {
+      method: "POST",
+      body: JSON.stringify({ text: text }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const result = await response.text();
+    return result;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+function addMiniCardFromText(popover, text, translation) {
+  popover.remove();
+  const added_cards_container = document.querySelector(
+    ".added_cards_container"
+  );
+  create_mini_card(added_cards_container, text, translation);
+  // Check if btn exists
+  const added_cards_btn_container = document.querySelector(
+    ".added_cards_btn_container"
+  );
+  if (!added_cards_btn_container.childNodes.length) {
+    const add_card_btn = document.createElement("button");
+    add_card_btn.classList.add("add_card_btn_from_text");
+    add_card_btn.textContent = "Add to module";
+    added_cards_btn_container.append(add_card_btn);
+
+    add_card_btn.addEventListener("click", async () => {
+      try {
+        const text_modules_select = document.querySelector(
+          "#text_modules_select"
+        );
+        const response = await fetch("/add_new_card", {
+          method: "POST",
+          body: JSON.stringify({
+            term: text,
+            def: translation,
+            module: text_modules_select.value,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken"),
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
+        const added_note = document.createElement("span");
+        added_note.classList.add("added_note");
+        added_note.textContent = "Cards successfully added";
+        added_cards_btn_container.append(added_note);
+        add_card_btn.disabled = true;
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  }
+}
+
+function createPopover(parentDiv, text, translation, flag) {
+  const popover_div = document.createElement("div");
+  parentDiv.append(popover_div);
+  popover_div.setAttribute("id", "translation_popover");
+  const def_par = document.createElement("p");
+  def_par.textContent = translation;
+  const add_translation_btn = document.createElement("button");
+  add_translation_btn.setAttribute("id", "add_translation");
+  add_translation_btn.textContent = "add card";
+  if (!flag) {
+    add_translation_btn.disabled = true;
+  }
+
+  const close_btn = document.createElement("button");
+  close_btn.textContent = "x";
+  close_btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    popover_div.remove();
+  });
+  popover_div.append(close_btn, def_par, add_translation_btn);
+  add_translation_btn.addEventListener(
+    "click",
+    () => addMiniCardFromText(popover_div, text, translation),
+    false
+  );
+  return popover_div;
 }
