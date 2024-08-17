@@ -9,6 +9,8 @@ import deepl
 from .config import deepl_key
 import json
 
+
+
 @login_required
 def index(request):
     current_user = User.objects.get(username=request.user.username)
@@ -46,6 +48,7 @@ def register(request):
         user_email = request.POST["register_email_input"]
         user_password = request.POST["register_password_input"]
         user_confirmation_password = request.POST["register_password_confirmation_input"]
+        user_lang = request.POST["register_lang_input"]
         if user_password == user_confirmation_password:
             user = User.objects.create_user(username=user_username, email=user_email, password=user_password)
             user.save()
@@ -189,4 +192,13 @@ def add_new_card(request):
         except:
             print("An exception occurred")
     
+    return render(request, "learneasy/error.html")
+
+
+def change_lang(request):
+    if request.method == "POST":
+        try:
+            return HttpResponse("Added card")
+        except:
+            print("An exception occurred")
     return render(request, "learneasy/error.html")

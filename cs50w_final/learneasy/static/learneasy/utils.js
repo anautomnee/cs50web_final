@@ -127,6 +127,24 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // Change lang selected at register
+  const register_lang_icons = document.querySelectorAll(".register_lang_icon");
+  const register_lang_input = document.querySelector("#register_lang_input");
+  let selected_lang = "english";
+  if (register_lang_icons) {
+    for (icon of register_lang_icons) {
+      icon.addEventListener("click", (e) => {
+        register_lang_icons.forEach((icon) =>
+          icon.classList.remove("register_selected_lang")
+        );
+        e.target.classList.add("register_selected_lang");
+        // Add hidden input to form
+        selected_lang = e.target.getAttribute("alt");
+        register_lang_input.value = selected_lang;
+      });
+    }
+  }
 });
 
 // Functions

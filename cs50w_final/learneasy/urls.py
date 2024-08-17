@@ -15,4 +15,5 @@ urlpatterns = [
     path("text/<int:id>", views.text, name="text"),
     path("translate", views.translate, name="translate"),
     path("add_new_card", views.add_new_card, name="add_new_card"),
+    path("change_lang", views.change_lang, name="change_lang")
 ]

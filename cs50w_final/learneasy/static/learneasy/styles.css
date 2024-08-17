@@ -35,6 +35,19 @@ nav {
   margin: 12px 42px 42px 42px;
 }
 
+.lang_container {
+  cursor: pointer;
+  background-color: #babde2;
+  padding: 8px;
+  border-radius: 4px;
+  display: flex;
+  gap: 12px;
+}
+
+.lang_container img {
+  width: 20px;
+}
+
 .main {
   margin: 0 42px;
 }
@@ -63,6 +76,9 @@ a {
   background-color: #ffffff;
   border-radius: 20px;
   border: 1px solid #373375;
+}
+#register_form {
+  margin: 6vh 0;
 }
 
 #login_form h1,
@@ -103,6 +119,22 @@ a {
   padding: 6px 12px;
   border-radius: 8px;
   align-self: center;
+}
+
+.lang_register_container {
+  display: flex;
+  justify-content: space-around;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+.lang_register_container img {
+  width: 30px;
+  cursor: pointer;
+}
+.register_selected_lang {
+  border: 2px solid #373375;
+  padding: 1px;
+  border-radius: 50%;
 }
 
 .nav-left,
