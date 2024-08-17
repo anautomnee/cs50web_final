@@ -71,6 +71,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // Words translation popover
   let module_selected_for_translation = false;
   let cards_from_text = false;
+  const mini_cards_from_text = [];
   const translatable_item_array =
     document.querySelectorAll(".translatable_item");
   for (word of translatable_item_array) {
@@ -90,7 +91,8 @@ window.addEventListener("DOMContentLoaded", () => {
             text_content,
             text,
             translation,
-            module_selected_for_translation
+            module_selected_for_translation,
+            mini_cards_from_text
           );
           popover.style.top = `${rect.bottom}px`;
           popover.style.left = `${rect.right}px`;
@@ -99,7 +101,8 @@ window.addEventListener("DOMContentLoaded", () => {
             text_content,
             text,
             translation,
-            module_selected_for_translation
+            module_selected_for_translation,
+            mini_cards_from_text
           );
           popover.style.top = `${rect.bottom}px`;
           popover.style.left = `${rect.right}px`;
@@ -267,47 +270,57 @@ async function translateText(text) {
   }
 }
 
-function addMiniCardFromText(popover, text, translation) {
+function addMiniCardFromText(popover, text, translation, mini_cards) {
   popover.remove();
   const added_cards_container = document.querySelector(
     ".added_cards_container"
   );
   create_mini_card(added_cards_container, text, translation);
+  // Add card to mini_cards_from_text array
+  mini_cards.push({
+    text: text,
+    translation: translation,
+  });
+
   // Check if btn exists
   const added_cards_btn_container = document.querySelector(
     ".added_cards_btn_container"
   );
-  if (!added_cards_btn_container.childNodes.length) {
+  if (mini_cards.length === 1) {
     const add_card_btn = document.createElement("button");
     add_card_btn.classList.add("add_card_btn_from_text");
     add_card_btn.textContent = "Add to module";
     added_cards_btn_container.append(add_card_btn);
 
-    add_card_btn.addEventListener("click", async () => {
+    add_card_btn.addEventListener("click", () => {
       try {
         const text_modules_select = document.querySelector(
           "#text_modules_select"
         );
-        const response = await fetch("/add_new_card", {
-          method: "POST",
-          body: JSON.stringify({
-            term: text,
-            def: translation,
-            module: text_modules_select.value,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCookie("csrftoken"),
-          },
+        mini_cards.forEach(async (card) => {
+          const response = await fetch("/add_new_card", {
+            method: "POST",
+            body: JSON.stringify({
+              term: card.text,
+              def: card.translation,
+              module: text_modules_select.value,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCookie("csrftoken"),
+            },
+          });
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
         });
-        if (!response.ok) {
-          throw new Error(`Response status: ${response.status}`);
-        }
         const added_note = document.createElement("span");
         added_note.classList.add("added_note");
         added_note.textContent = "Cards successfully added";
         added_cards_btn_container.append(added_note);
         add_card_btn.disabled = true;
+        mini_cards.length = 0;
+        console.log(mini_cards);
       } catch (error) {
         console.log(error);
       }
@@ -315,7 +328,7 @@ function addMiniCardFromText(popover, text, translation) {
   }
 }
 
-function createPopover(parentDiv, text, translation, flag) {
+function createPopover(parentDiv, text, translation, flag, mini_cards) {
   const popover_div = document.createElement("div");
   parentDiv.append(popover_div);
   popover_div.setAttribute("id", "translation_popover");
@@ -337,7 +350,7 @@ function createPopover(parentDiv, text, translation, flag) {
   popover_div.append(close_btn, def_par, add_translation_btn);
   add_translation_btn.addEventListener(
     "click",
-    () => addMiniCardFromText(popover_div, text, translation),
+    () => addMiniCardFromText(popover_div, text, translation, mini_cards),
     false
   );
   return popover_div;
