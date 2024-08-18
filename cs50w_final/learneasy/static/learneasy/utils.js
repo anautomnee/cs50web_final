@@ -145,6 +145,32 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
+
+  // Change lang in layout
+  const lang_container_layout = document.querySelector(".lang_container");
+  if (lang_container_layout) {
+    const change_lang_modal_input = document.querySelector(
+      "#change_lang_modal_input"
+    );
+    const change_lang_modal_icons = document.querySelectorAll(
+      ".change_lang_modal_icon"
+    );
+    lang_container_layout.addEventListener("click", () => {
+      const modal = document.querySelector(".change_lang_modal");
+      modal.style.display = "flex";
+      for (icon of change_lang_modal_icons) {
+        icon.addEventListener("click", (e) => {
+          change_lang_modal_icons.forEach((icon) =>
+            icon.classList.remove("change_lang_modal_selected")
+          );
+          e.target.classList.add("change_lang_modal_selected");
+          // Add hidden input to form
+          selected_lang = e.target.getAttribute("alt");
+          change_lang_modal_input.value = selected_lang;
+        });
+      }
+    });
+  }
 });
 
 // Functions

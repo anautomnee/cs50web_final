@@ -48,6 +48,38 @@ nav {
   width: 20px;
 }
 
+.change_lang_modal {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #1e1e3f93;
+}
+
+.change_lang_modal .change_lang_modal_inner {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  background-color: #babde2;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+#change_lang_modal_btn {
+  background-color: #373375;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  margin-top: 10px;
+  align-self: center;
+}
+
 .main {
   margin: 0 42px;
 }
@@ -121,17 +153,29 @@ a {
   align-self: center;
 }
 
-.lang_register_container {
+.lang_register_container,
+.change_lang_modal_icons_container {
   display: flex;
   justify-content: space-around;
   padding: 8px;
   margin-bottom: 8px;
 }
-.lang_register_container img {
+
+.change_lang_modal_icons_container {
+  margin-top: 20px;
+}
+
+.lang_register_container img,
+.change_lang_modal_icons_container img {
   width: 30px;
   cursor: pointer;
 }
-.register_selected_lang {
+
+.change_lang_modal_icons_container img {
+  width: 40px;
+}
+.register_selected_lang,
+.change_lang_modal_selected {
   border: 2px solid #373375;
   padding: 1px;
   border-radius: 50%;

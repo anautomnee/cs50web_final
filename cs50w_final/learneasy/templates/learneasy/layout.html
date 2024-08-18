@@ -33,17 +33,68 @@
       </div>
       <div class="nav-right">
         {% if user.is_authenticated %}
-        <a href="{% url 'change_lang' %}">
-          <div class="lang_container">
-            <span>Learning</span>
-            <img src="{% static 'learneasy/german.svg' %}" alt="german" />
-          </div>
-        </a>
+        <div class="lang_container">
+          <span>Learning </span>
+          <img src="/static/learneasy/{{ lang }}.svg" alt="german" />
+        </div>
         <a href="{% url 'logout' %}">Log out</a>
         {% else %}
         <a href="{% url 'login' %}">Log in</a>
         <a href="{% url 'register' %}">Register</a>
         {% endif %}
+      </div>
+      <div class="change_lang_modal">
+        <div class="change_lang_modal_inner">
+          <h1>Learning</h1>
+          <form
+            action="{% url 'change_lang' %}?next={{ request.path|urlencode }}"
+            method="post"
+          >
+            {% csrf_token %}
+            <div class="change_lang_modal_icons_container">
+              <img
+                class="change_lang_modal_icon change_lang_modal_selected"
+                src="{% static 'learneasy/english.svg' %}"
+                alt="english"
+              />
+              <img
+                class="change_lang_modal_icon"
+                src="{% static 'learneasy/german.svg' %}"
+                alt="german"
+              />
+              <img
+                class="change_lang_modal_icon"
+                src="{% static 'learneasy/spanish.svg' %}"
+                alt="spanish"
+              />
+              <img
+                class="change_lang_modal_icon"
+                src="{% static 'learneasy/french.svg' %}"
+                alt="french"
+              />
+              <img
+                class="change_lang_modal_icon"
+                src="{% static 'learneasy/italian.svg' %}"
+                alt="italian"
+              />
+            </div>
+            <input
+              type="hidden"
+              name="change_lang_modal_input"
+              id="change_lang_modal_input"
+              value="{{lang}}"
+            />
+            <input
+              type="hidden"
+              name="change_lang_modal_next"
+              id="change_lang_modal_next"
+              value="{{ request.path }}"
+            />
+            <button type="submit" id="change_lang_modal_btn">
+              Change language
+            </button>
+          </form>
+        </div>
       </div>
     </nav>
     {% block main %} {% endblock %}
