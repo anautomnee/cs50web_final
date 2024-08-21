@@ -27,9 +27,30 @@
             src="{% static 'learneasy/logo_learn_easy.png' %}"
             alt="logo_LearnEasy"
         /></a>
-        <a href="#">Modules</a>
-        <a href="#">Texts</a>
-        <a href="#">Groups</a>
+        <div class="layout_dropdown">
+          <span>Modules</span>
+          <div class="dropdown-content">
+            {% for module in modules %}
+            <a href="{% url 'module' module.id %}">{{ module.module_name }}</a>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="layout_dropdown">
+          <span>Texts</span>
+          <div class="dropdown-content">
+            {% for text in texts %}
+            <a href="{% url 'text' text.id %}">{{ text.text_name }}</a>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="layout_dropdown">
+          <span>Groups</span>
+          <div class="dropdown-content">
+            {% for group in groups %}
+            <a href="{% url 'group' group.id %}">{{ group.group_name }}</a>
+            {% endfor %}
+          </div>
+        </div>
       </div>
       <div class="nav-right">
         {% if user.is_authenticated %}

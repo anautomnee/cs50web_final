@@ -10,7 +10,7 @@
           <h3>Create a module</h3>
         </div>
       </a>
-      {% for module in modules %}
+      {% for module in preview_modules %}
       <a href="{% url 'module' module.id %}">
         <div class="module-small-card">
           <div></div>
@@ -32,7 +32,7 @@
           <h3>Create a text</h3>
         </div>
       </a>
-      {% for text in texts %}
+      {% for text in preview_texts %}
       <a href="{% url 'text' text.id %}">
         <div class="module-small-card">
           <div></div>

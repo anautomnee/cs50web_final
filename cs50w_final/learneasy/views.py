@@ -14,13 +14,17 @@ import json
 def index(request):
     current_user = User.objects.get(username=request.user.username)
     user_modules = current_user.user_modules.all()[:3]
+    user_modules_layout = current_user.user_modules.all()
     user_groups = current_user.user_groups.all()
     user_texts = current_user.user_texts.all()[:3]
+    user_texts_layout = current_user.user_texts.all()
     user_lang = current_user.language
     return render(request, "learneasy/index.html", {
-        "modules": user_modules,
+        "modules": user_modules_layout,
+        "preview_modules": user_modules,
         "groups": user_groups,
-        "texts": user_texts,
+        "texts": user_texts_layout,
+        "preview_texts": user_texts,
         "lang": user_lang
     })
 
@@ -103,8 +107,15 @@ def module(request, id):
     page_obj = paginator.get_page(page_number)
     lang = current_user.language
 
+    modules = current_user.user_modules.all()
+    texts = current_user.user_texts.all()
+    groups = current_user.user_groups.all()
+
     return render(request, "learneasy/module.html", {
         "module": current_module,
+        "modules": modules,
+        "texts": texts,
+        "groups": groups,
         "cards": cards,
         "cards_count": cards_count,
         "page_obj": page_obj,
@@ -136,10 +147,17 @@ def group(request, id):
     current_group = Group.objects.get(id=id)
     if current_group.group_owner.username != request.user.username:
         return render(request, "learneasy/error.html")
+    
+    modules = current_user.user_modules.all()
+    texts = current_user.user_texts.all()
+    groups = current_user.user_groups.all()
 
     return render(request, "learneasy/group.html", {
         "group": current_group,
-        "lang": lang
+        "lang": lang,
+        "modules": modules,
+        "texts": texts,
+        "groups": groups,
     })
 
 
@@ -168,10 +186,15 @@ def text(request, id):
     lang = current_user.language
     if current_text.text_owner.username != request.user.username:
         return render(request, "learneasy/error.html")
+    
+    texts = current_user.user_texts.all()
+    groups = current_user.user_groups.all()
 
     return render(request, "learneasy/text.html", {
         "text": current_text,
         "modules": user_modules,
+        "texts": texts,
+        "groups": groups,
         "lang": lang
     })
 
