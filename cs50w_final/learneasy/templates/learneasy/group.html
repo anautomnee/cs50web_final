@@ -1,5 +1,119 @@
 {% extends "learneasy/layout.html" %} {% block main %}
 <div class="main">
-  <h1>{{ group.group_name }}</h1>
+  <h1 id="group_header">{{ group.group_name }}</h1>
+  <div class="group_grid">
+    <div>
+      <h2>Modules</h2>
+      <div class="group_container">
+        {% if group_modules %} {% for module in group_modules %}
+        <a href="{% url 'module' module.id %}">{{ module.module_name }}</a>
+        {% endfor %} {% else %}
+        <p>No modules in this group yet</p>
+        {% endif %}
+        <button class="add_to_group_btn add_module_to_group {{ group.id }}">
+          Add to group
+        </button>
+        <form
+          hidden
+          action="/add_to_group"
+          method="post"
+          id="add_module_to_group_form"
+        >
+          {% csrf_token %}
+          <select
+            name="add_to_module_group_select"
+            id="add_to_module_group_select"
+            multiple
+          >
+            {% for module in modules %}
+            <option value="{{ module.module_name }}">
+              {{ module.module_name }}
+            </option>
+            {% endfor %}
+          </select>
+          <input
+            type="hidden"
+            name="add_to_group_form_type"
+            id="add_to_group_form_type"
+            value="module"
+          />
+          <input
+            type="hidden"
+            name="add_to_group_form_next"
+            id="add_to_group_form_next"
+            value="{{ request.path }}"
+          />
+          <input
+            type="hidden"
+            name="add_to_group_form_group_name"
+            id="add_text_to_group_form_group_name"
+            value="{{ group.group_name }}"
+          />
+          <input
+            type="submit"
+            value="Add to group"
+            name="add_module_to_group_form_submit"
+            ,
+            id="add_module_to_group_form_submit"
+          />
+        </form>
+      </div>
+    </div>
+    <div>
+      <h2>Texts</h2>
+      <div class="group_container">
+        {% if group_texts %} {% for text in group_texts %}
+        <a href="{% url 'text' text.id %}">{{ text.text_name }}</a>
+        {% endfor %} {% else %}
+        <p>No texts in this group yet</p>
+        {% endif %}
+        <button class="add_to_group_btn add_text_to_group {{ group.id }}">
+          Add to group
+        </button>
+        <form
+          hidden
+          action="/add_to_group"
+          method="post"
+          id="add_text_to_group_form"
+        >
+          {% csrf_token %}
+          <select
+            name="add_to_text_group_select"
+            id="add_to_text_group_select"
+            multiple
+          >
+            {% for text in texts %}
+            <option value="{{ text.text_name }}">{{ text.text_name }}</option>
+            {% endfor %}
+          </select>
+          <input
+            type="hidden"
+            name="add_to_group_form_type"
+            id="add_to_group_form_type"
+            value="text"
+          />
+          <input
+            type="hidden"
+            name="add_to_group_form_next"
+            id="add_to_group_form_next"
+            value="{{ request.path }}"
+          />
+          <input
+            type="hidden"
+            name="add_to_group_form_group_name"
+            id="add_text_to_group_form_group_name"
+            value="{{ group.group_name }}"
+          />
+          <input
+            type="submit"
+            value="Add to group"
+            name="add_text_to_group_form_submit"
+            ,
+            id="add_module_to_group_form_submit"
+          />
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

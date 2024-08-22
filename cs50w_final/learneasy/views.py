@@ -126,18 +126,36 @@ def module(request, id):
 def add_group(request):
     current_user = User.objects.get(username=request.user.username)
     if request.method == "POST":
-        group_name = ''
-        new_group = ''
+        name = request.POST["new_group_name"]
+        new_group = Group(group_name=name, group_owner=current_user)
+        new_group.save()
 
-        for key, value in request.POST.items():
-            if key != 'csrfmiddlewaretoken' and value:
-                print(f"Key: {key}, value: {value}")
+        # Add modules
+        module_array = request.POST.getlist('user_modules_select')
+        for module in module_array:
+            current_module = Module.objects.get(module_name=module)
+            current_module.module_group = new_group
+            current_module.save()
 
-        return redirect("index")
+        # Add texts
+        text_array = request.POST.getlist('new_group_texts_select')
+        for text in text_array:
+            current_text = Text.objects.get(text_name=text)
+            current_text.text_group = new_group
+            current_text.save()
 
+        return HttpResponseRedirect(f"group/{new_group.id}")
+
+    lang = current_user.language
     user_modules = current_user.user_modules.all()
+    texts = current_user.user_texts.all()
+    groups = current_user.user_groups.all()
+
     return render(request, "learneasy/add_group.html", {
-        "user_modules": user_modules
+        "modules": user_modules,
+        "texts": texts,
+        "groups": groups,
+        "lang": lang,
     })
     
 @login_required
@@ -145,6 +163,8 @@ def group(request, id):
     current_user = User.objects.get(username=request.user.username)
     lang = current_user.language
     current_group = Group.objects.get(id=id)
+    group_modules = current_group.group_modules.all()
+    group_texts = current_group.group_texts.all()
     if current_group.group_owner.username != request.user.username:
         return render(request, "learneasy/error.html")
     
@@ -154,6 +174,8 @@ def group(request, id):
 
     return render(request, "learneasy/group.html", {
         "group": current_group,
+        "group_modules": group_modules,
+        "group_texts": group_texts,
         "lang": lang,
         "modules": modules,
         "texts": texts,
@@ -171,11 +193,19 @@ def add_text(request):
             text_content = form.cleaned_data["text_content"]
             new_text = Text(text_name=text_name, text_content=text_content, text_owner=current_user)
             new_text.save()
-            return redirect("index")
+            return redirect(f"text/{new_text.id}")
 
+    modules = current_user.user_modules.all()
+    texts = current_user.user_texts.all()
+    groups = current_user.user_groups.all()
+    lang = current_user.language
     form = TextForm()
     return render(request, "learneasy/add_text.html", {
-        "form": form 
+        "form": form,
+        "modules": modules,
+        "texts": texts,
+        "groups": groups,
+        "lang": lang,
     })
 
 @login_required
@@ -245,4 +275,31 @@ def change_lang(request):
         current_user.save(update_fields=['language'])
         print(current_user.language)
         return HttpResponseRedirect(next)
+    return render(request, "learneasy/error.html")
+
+def add_to_group(request):
+    if request.method == "POST":
+        current_user = User.objects.get(username=request.user.username)
+        group_name = request.POST["add_to_group_form_group_name"]
+        group = Group.objects.get(group_name=group_name)
+        next = request.POST["add_to_group_form_next"]
+        type = request.POST["add_to_group_form_type"]
+
+        if type == "module":
+            module_array = request.POST.getlist('add_to_module_group_select')
+            print(module_array)
+            for module in module_array:
+                current_module = Module.objects.get(module_name=module)
+                current_module.module_group = group
+                current_module.save()
+            return HttpResponseRedirect(next)
+        if type == "text":
+            text_array = request.POST.getlist('add_to_text_group_select')
+            print(text_array)
+            for text in text_array:
+                current_text = Text.objects.get(text_name=text)
+                current_text.text_group = group
+                current_text.save()
+            return HttpResponseRedirect(next)
+        
     return render(request, "learneasy/error.html")

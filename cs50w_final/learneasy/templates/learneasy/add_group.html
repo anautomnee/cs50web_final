@@ -12,11 +12,30 @@
         placeholder="E.g My new group"
       />
     </div>
-    <select name="user_modules_select" id="user_modules_select" multiple>
-      {% for module in user_modules %}
-      <option value="{{ module.module_name }}">{{ module.module_name }}</option>
-      {% endfor %}
-    </select>
+    <div class="group_grid">
+      <div class="group_container">
+        <h2>Select modules</h2>
+        <select name="user_modules_select" id="user_modules_select" multiple>
+          {% for module in modules %}
+          <option value="{{ module.module_name }}">
+            {{ module.module_name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="group_container">
+        <h2>Select texts</h2>
+        <select
+          name="new_group_texts_select"
+          id="new_group_texts_select"
+          multiple
+        >
+          {% for text in texts %}
+          <option value="{{ text.text_name }}">{{ text.text_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
     <button type="submit" class="add_submit_btn">Add group</button>
   </form>
 </div>

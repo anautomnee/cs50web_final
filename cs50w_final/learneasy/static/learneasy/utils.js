@@ -171,6 +171,26 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // Add new modules and texts to group
+  const add_module_to_group = document.querySelector(".add_module_to_group");
+  const add_text_to_group = document.querySelector(".add_text_to_group");
+  if (add_module_to_group) {
+    add_module_to_group.addEventListener("click", () => {
+      const module_id = add_module_to_group.classList[2];
+      const form = document.querySelector("#add_module_to_group_form");
+      add_module_to_group.hidden = true;
+      form.style.display = "flex";
+    });
+  }
+  if (add_text_to_group) {
+    add_text_to_group.addEventListener("click", () => {
+      const text_id = add_text_to_group.classList[2];
+      const form = document.querySelector("#add_text_to_group_form");
+      add_text_to_group.hidden = true;
+      form.style.display = "flex";
+    });
+  }
 });
 
 // Functions
