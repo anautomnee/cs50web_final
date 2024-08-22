@@ -8,6 +8,7 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("logout", views.logout_view, name="logout"),
     path("add_module", views.add_module, name="add_module"),
+    path("edit_module/<int:id>", views.edit_module, name="edit_module"),
     path("module/<int:id>", views.module, name="module"),
     path("add_group", views.add_group, name="add_group"),
     path("group/<int:id>", views.group, name="group"),

@@ -1,7 +1,7 @@
 {% extends "learneasy/layout.html" %} {% block main %}
 <div class="main">
   <h1>Create a new module</h1>
-  <form action="{% url 'add_module' %}" method="post">
+  <form {% if cards %}action="{% url 'edit_module' module_id %}"{% else %}action="{% url 'add_module' %}"{% endif %} method="post">
     {% csrf_token %}
     <div class="new_module_name">
       <label for="new_module_name">Module name:</label>
@@ -11,11 +11,50 @@
           name="new_module_name"
           id="new_module_name"
           placeholder="E.g My new module"
+          {% if cards %}value="{{ module_name }}"{% endif %}
         />
-        <button type="submit" class="add_submit_btn">Add group</button>
+        {% if cards %}
+          <button type="submit" class="add_submit_btn">Edit module</button>
+        {% else %}
+          <button type="submit" class="add_submit_btn">Add module</button>
+        {% endif %}
       </div>
     </div>
     <div class="new_module_cards_container">
+      {% if cards %} 
+      {% for card in cards %}
+      <div class="new_module_card_container">
+        <div class="textareas_container">
+          <div class="term">
+            <textarea
+              id="term{{ card.id }}"
+              name="term{{ card.id }}"
+            >{{ card.term }}</textarea>
+            <label for="term{{ card.id }}">Term</label>
+          </div>
+          <div class="definition">
+            <textarea
+              id="definition{{ card.id }}"
+              name="definition{{ card.id }}"
+              class="definition_texarea"
+            >{{ card.definition }}</textarea>
+            <label for="definition{{ card.id }}">Definition</label>
+          </div>
+        </div>
+        <svg
+          class="delete_card_icon"
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="#FFFFFF"
+        >
+          <path
+            d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"
+          />
+        </svg>
+      </div>
+      {% endfor %} {% else %}
       <div class="new_module_card_container">
         <div class="textareas_container">
           <div class="term">
@@ -100,6 +139,7 @@
           />
         </svg>
       </div>
+      {% endif %}
       <div class="add_card_container">
         <svg
           xmlns="http://www.w3.org/2000/svg"

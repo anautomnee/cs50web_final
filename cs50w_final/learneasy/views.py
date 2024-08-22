@@ -69,8 +69,8 @@ def register(request):
 
 @login_required
 def add_module(request):
+    current_user = User.objects.get(username=request.user.username)
     if request.method == "POST":
-        current_user = User.objects.get(username=request.user.username)
         module_name = ''
         new_module = ''
         new_term = ''
@@ -89,11 +89,71 @@ def add_module(request):
                     new_def = value
                     new_card = Card(term=new_term, definition=new_def, card_module=new_module)
                     new_card.save()
-                
-        return redirect("index")
-    return render(request, "learneasy/add_module.html")
+        return redirect(f"module/{new_module.id}")
+            
+    modules = current_user.user_modules.all()
+    texts = current_user.user_texts.all()
+    groups = current_user.user_groups.all()
+    lang = current_user.language
+    return render(request, "learneasy/add_module.html", {
+        "modules": modules,
+        "texts": texts,
+        "groups": groups,
+        "lang": lang
+    })
 
-# @login_required
+def edit_module(request, id):
+    current_module = Module.objects.get(id=id)
+    current_user = User.objects.get(username=request.user.username)
+    module_id = current_module.id
+    if request.method == "POST":
+        new_term = ''
+        new_def = ''
+        for key, value in request.POST.items():
+            if key != 'csrfmiddlewaretoken' and value:
+                if key == 'new_module_name':
+                    current_module.module_name = value
+                    current_module.save(update_fields=["module_name"])
+                    continue
+                if key.startswith('term'):
+                    id=key[4:]
+                    try:
+                        current_card = Card.objects.get(id=id)
+                        current_card.term = value
+                        current_card.save() 
+                    except:
+                        new_term = value
+                    continue
+                if key.startswith('def'):
+                    id=key[10:]
+                    try:
+                        current_card = Card.objects.get(id=id)
+                        current_card.definition = value
+                        current_card.save() 
+                    except:
+                        new_def = value
+                        new_card = Card(term=new_term, definition=new_def, card_module=current_module)
+                        new_card.save()
+                    continue
+        return redirect("module", module_id)
+    
+    cards = current_module.module_cards.all()
+
+    modules = current_user.user_modules.all()
+    texts = current_user.user_texts.all()
+    groups = current_user.user_groups.all()
+    lang = current_user.language
+    return render(request, "learneasy/add_module.html", {
+        "modules": modules,
+        "texts": texts,
+        "groups": groups,
+        "lang": lang, 
+        "cards": cards,
+        "module_id": module_id,
+        "module_name": current_module.module_name
+    })
+
+@login_required
 def module(request, id):
     current_module = Module.objects.get(id=id)
     current_user = User.objects.get(username=request.user.username)

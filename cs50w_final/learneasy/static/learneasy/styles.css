@@ -258,12 +258,22 @@ a {
   gap: 36px;
 }
 
-.recent-module-name,
-.recent-group-name {
+.recent-module-name {
   width: 20ch;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.recent-group-name {
+  width: 14ch;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.group-card {
+  text-align: center;
 }
 
 .group-card div {
@@ -272,7 +282,6 @@ a {
   background-color: #babde2;
   border-radius: 50%;
   margin-bottom: 14px;
-  margin-right: 36px;
 }
 
 .module-small-card div,
@@ -321,6 +330,7 @@ a {
 .groups_main {
   margin-top: 21px;
   display: flex;
+  gap: 36px;
 }
 
 .groups_main h3 {
