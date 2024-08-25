@@ -1,8 +1,6 @@
 {% extends "learneasy/layout.html" %} {% block main %}
 <div class="main">
   <h1>Recent modules</h1>
-  <div class="recent-modules">
-    <a href="#">See all modules</a>
     <div class="recent-modules-grid">
       <a href="{% url 'add_module' %}">
         <div class="module-small-card">
@@ -21,10 +19,7 @@
       </a>
       {% endfor %}
     </div>
-  </div>
   <h1>Recent texts</h1>
-  <div class="recent-texts">
-    <a href="#">See all texts</a>
     <div class="recent-texts-grid">
       <a href="{% url 'add_text' %}">
         <div class="module-small-card">
@@ -43,7 +38,6 @@
       </a>
       {% endfor %}
     </div>
-  </div>
   <h1>Groups</h1>
   <div class="groups_div">
     <div id="blur_edge_left"></div>

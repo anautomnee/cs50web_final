@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse
 from .models import User, Group, Module, Text, Card
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -8,6 +9,7 @@ from .forms import TextForm
 import deepl
 from .config import deepl_key
 import json
+import random
 
 
 @login_required
@@ -339,7 +341,6 @@ def change_lang(request):
 
 def add_to_group(request):
     if request.method == "POST":
-        current_user = User.objects.get(username=request.user.username)
         group_name = request.POST["add_to_group_form_group_name"]
         group = Group.objects.get(group_name=group_name)
         next = request.POST["add_to_group_form_next"]
@@ -362,4 +363,42 @@ def add_to_group(request):
                 current_text.save()
             return HttpResponseRedirect(next)
         
+    return render(request, "learneasy/error.html")
+
+
+@login_required
+def match(request, module_id):
+    current_user = User.objects.get(username=request.user.username)
+    current_module = Module.objects.get(id=module_id)
+    cards = sorted(current_module.module_cards.all(), key=lambda x: random.random())
+    paginator = Paginator(cards, 5)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    modules = current_user.user_modules.all()
+    texts = current_user.user_texts.all()
+    groups = current_user.user_groups.all()
+    lang = current_user.language
+
+    return render(request, "learneasy/match.html", {
+        "module": current_module,
+        "modules": modules,
+        "texts": texts,
+        "groups": groups,
+        "lang": lang,
+        "page_obj": page_obj,
+    })
+
+def collect(request):
+    if request.method == "POST":
+        type = json.loads(request.body)["type"]
+        content = json.loads(request.body)["content"]
+        module_id = json.loads(request.body)["module_id"]
+        current_module = Module.objects.get(id=module_id)
+        if type == "term":
+            card = list(Card.objects.filter(term=content, card_module=current_module).values())[0]
+            return JsonResponse(card)
+        
+        card = list(Card.objects.filter(definition=content, card_module=current_module).values())[0]
+        return JsonResponse(card)
     return render(request, "learneasy/error.html")

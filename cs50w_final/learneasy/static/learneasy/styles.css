@@ -82,7 +82,7 @@ nav {
   padding: 20px;
 }
 
-#change_lang_modal_btn {
+#change_lang_modal_btn, .tryAgainBtn {
   background-color: #373375;
   color: #ffffff;
   border: none;
@@ -236,14 +236,6 @@ a {
   background-color: #f1f2fa;
 }
 
-.recent-modules,
-.recent-texts {
-  display: flex;
-  flex-direction: column;
-  max-width: 1068px;
-  margin-bottom: 42px;
-}
-
 .recent-modules a,
 .recent-texts a {
   align-self: flex-end;
@@ -252,6 +244,8 @@ a {
 .recent-modules-grid,
 .recent-texts-grid,
 .recent-groups-grid {
+  margin-top: 28px;
+  margin-bottom: 42px;
   display: grid;
   grid-template-columns: repeat(4, 240px);
   align-items: start;
@@ -640,7 +634,7 @@ footer {
   display: flex;
   gap: 60px;
   justify-content: space-between;
-  min-height: 600px;
+  min-height: 68vh;
 }
 
 #translation_popover {
@@ -747,4 +741,61 @@ footer {
   padding: 8px 0;
   border-radius: 8px;
   cursor: pointer;
+}
+
+.match_container {
+  margin-block: 42px;
+  min-height: 200px;
+  width: 940px;
+  border-radius: 12px;
+  background-color: #babde2;
+  min-height: 68vh;
+  padding: 42px;
+  display: flex;
+  justify-content: space-around;
+
+}
+
+.match_container_terms,
+.match_container_defs {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.match_container .module_card_container {
+  width: 320px;
+  height: 120px;
+  margin-bottom: 0;
+  transition: transform .3s;
+  transition: background-color .3s;
+  cursor: pointer;
+}
+.match_container .module_card_container:hover {
+  transform: translateY(-5px);
+  background-color: #c1bebe;
+}
+
+.match__message {
+  position: absolute;
+  top: 160px;
+  display: none;
+  align-items: center;
+  background-color: #c1bebe;
+  border: 1px solid #373375;
+  padding: 8px 24px;
+}
+
+.congratulationsBanner {
+  position: absolute;
+  top: 20vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20vh 0;
+  padding: 42px;
+  height: fit-content;
+  background-color: #fffcf5;
+  border-radius: 20px;
+  border: 1px solid #373375;
 }

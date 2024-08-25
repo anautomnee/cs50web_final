@@ -191,6 +191,25 @@ window.addEventListener("DOMContentLoaded", () => {
       form.style.display = "flex";
     });
   }
+
+
+  // Shuffle defs in match
+  const match_container_defs = document.querySelector('.match_container_defs');
+  if (match_container_defs) {
+    for (let i = match_container_defs.children.length; i >= 0; i--) {
+      match_container_defs.appendChild(match_container_defs.children[Math.random() * i | 0]);
+    }
+  }
+
+
+  // Match
+  const match_terms = document.querySelectorAll(".match_container_terms_card");
+  const match_defs = document.querySelectorAll(".match_container_defs_card");
+  if (match_terms) {
+    match(match_terms, match_defs, "term")
+    match(match_defs, match_terms, "definition")
+  }
+
 });
 
 // Functions
@@ -418,4 +437,104 @@ function createPopover(parentDiv, text, translation, flag, mini_cards) {
     false
   );
   return popover_div;
+}
+
+async function collectCard(type, content, module_id) {
+  try {
+    const response = await fetch(`/collect`, {
+      method: "POST",
+      body: JSON.stringify({ 
+        type: type,
+        content: content,
+        module_id: module_id
+       }),
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+function matchActivation(e, array, data, type) {
+  let subtype;
+  type === "definition"? subtype = "term" : subtype = "definition";
+  const match__message = document.querySelector('.match__message');
+  if(e.target.textContent === data[subtype]) {
+      // Desactivate choice
+      for (def_card of array) {
+        def_card.classList.remove("choice")
+      }
+      e.target.remove()
+      current_term.remove()
+      match__message.style.display = "none"
+      // Check if container is empty
+      if (match__message.nextElementSibling.children.length === 0) {
+        const match_container = document.querySelector(".match_container")
+        if(match_container.classList[1]) {
+          window.location.replace(`${location.pathname}?page=${match_container.classList[1]}`)
+        } else {
+          const buttons = createCongratulationsBanner(match_container);
+          console.log(location.pathname.slice(-1))
+          buttons.backLink.setAttribute("href", `/module/${location.pathname.slice(-1)}`);
+          buttons.tryAgainBtn.setAttribute("href", `${location.pathname}?page=1`);
+        }
+      }
+
+  } else {
+    match__message.style.display = "flex"
+  }
+}
+
+function match(main_array, side_array, type) {
+  for (card of main_array) {
+    card.addEventListener('click', (e) => {
+      if(!e.target.classList.contains("choice")) {
+        module_id = e.target.classList[1]
+        e.target.style.backgroundColor = "#c1bebe";
+        current_term = e.target
+        // Activate choice
+        for (card of side_array) {
+          card.classList.add("choice")
+        }
+        collectCard(type, current_term.textContent, module_id).then(data => {
+          for (card of side_array) {
+            card.addEventListener('click', (e) => {
+              if (e.target.classList.contains("choice")) {
+                matchActivation(e,side_array, data, type)
+              }
+            })
+          }
+          
+        })
+      }
+    })
+  }
+}
+
+function createCongratulationsBanner(parentDiv) {
+  const container = document.createElement('div');
+  const header = document.createElement('h1');
+  const tryAgainBtn = document.createElement('a');
+  const backLink = document.createElement('a');
+  container.classList.add("congratulationsBanner");
+  tryAgainBtn.classList.add("tryAgainBtn");
+  header.textContent = "Good job!";
+  tryAgainBtn.textContent = "Try again";
+  backLink.textContent = "Back to module";
+  backLink.setAttribute("href", "#");
+  parentDiv.append(container);
+  container.append(header, tryAgainBtn, backLink);
+  return {
+    tryAgainBtn: tryAgainBtn,
+    backLink: backLink
+  };
 }
