@@ -19,5 +19,6 @@ urlpatterns = [
     path("add_new_card", views.add_new_card, name="add_new_card"),
     path("change_lang", views.change_lang, name="change_lang"),
     path("match/<int:module_id>", views.match, name="match"),
+    path("spell/<int:module_id>", views.spell, name="spell"),
     path("collect", views.collect, name="collect")
 ]

@@ -208,7 +208,55 @@ window.addEventListener("DOMContentLoaded", () => {
   if (match_terms) {
     match(match_terms, match_defs, "term")
     match(match_defs, match_terms, "definition")
+  };
+
+
+  // Spell
+  const spellCheckBtn  = document.querySelector("#spell_container__buttons__check");
+  if (spellCheckBtn) {
+    const spellContainer = document.querySelector(".spell_container");
+    const spellHelpBtn = document.querySelector("#spell_container__buttons__help");
+    const spellInput = document.querySelector("#spellInput");
+    const spellMessage = document.querySelector(".spell__message");
+    const spellCorrect = document.querySelector("#spell__correct");
+    spellCheckBtn.addEventListener('click', () => {
+      const module_id = spellInput.classList[0];
+      collectCard("definition", spellInput.nextElementSibling.textContent, module_id).then(data => {
+        if (spellInput.value === data.term) {
+          let page_num = spellContainer.classList[1];
+          if (page_num) {
+            setTimeout(() => window.location.replace(`${location.pathname}?page=${page_num}`), 600)
+            spellCorrect.hidden = false;
+          } else {
+            const parentDiv = spellMessage.parentElement;
+            parentDiv.textContent = "";
+            const buttons = createCongratulationsBanner(parentDiv)
+            buttons.backLink.setAttribute("href", `/module/${location.pathname.slice(-1)}`);
+            buttons.tryAgainBtn.setAttribute("href", `${location.pathname}?page=1`);
+          }
+        } else {
+          console.log(false)
+          spellMessage.style.display = "flex";
+        }
+      })
+    });
+    spellHelpBtn.addEventListener('click', () => {
+      const module_id = spellInput.classList[0];
+      collectCard("definition", spellInput.nextElementSibling.textContent, module_id).then(data => {
+        if (spellInput.value.length < data.term.length) {
+          if (data.term.includes(spellInput.value)) {
+            spellInput.value = data.term.slice(0, spellInput.value.length + 1);
+          } else {
+            spellInput.value = data.term.slice(0, spellInput.value.length);
+          }
+        } else {
+          spellInput.value = data.term;
+        }
+        
+      })
+    });
   }
+
 
 });
 
@@ -499,8 +547,11 @@ function match(main_array, side_array, type) {
     card.addEventListener('click', (e) => {
       if(!e.target.classList.contains("choice")) {
         module_id = e.target.classList[1]
-        e.target.style.backgroundColor = "#c1bebe";
-        current_term = e.target
+        for (card of main_array) {
+          card.classList.remove("match_chosen")
+        }
+        e.target.classList.add("match_chosen")
+        current_term = e.target;
         // Activate choice
         for (card of side_array) {
           card.classList.add("choice")
@@ -529,7 +580,7 @@ function createCongratulationsBanner(parentDiv) {
   tryAgainBtn.classList.add("tryAgainBtn");
   header.textContent = "Good job!";
   tryAgainBtn.textContent = "Try again";
-  backLink.textContent = "Back to module";
+  backLink.textContent = " Back to module";
   backLink.setAttribute("href", "#");
   parentDiv.append(container);
   container.append(header, tryAgainBtn, backLink);

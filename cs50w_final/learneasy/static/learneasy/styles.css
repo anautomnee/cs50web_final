@@ -743,15 +743,21 @@ footer {
   cursor: pointer;
 }
 
+.match_main, .spell_main {
+  margin: 0 auto;
+}
+
 .match_container {
-  margin-block: 42px;
-  min-height: 200px;
+  margin-top: 24px;
+  margin-bottom: 42px;
+  position: relative;
   width: 940px;
   border-radius: 12px;
   background-color: #babde2;
   min-height: 68vh;
   padding: 42px;
   display: flex;
+  flex-direction: row;
   justify-content: space-around;
 
 }
@@ -773,12 +779,18 @@ footer {
 }
 .match_container .module_card_container:hover {
   transform: translateY(-5px);
-  background-color: #c1bebe;
+  background-color: #373375;
+  color: #fffcf5;
 }
 
-.match__message {
+.match_chosen {
+  background-color: #373375;
+  color: #fffcf5;
+}
+
+.match__message, .spell__message {
   position: absolute;
-  top: 160px;
+  top: -20px;
   display: none;
   align-items: center;
   background-color: #c1bebe;
@@ -788,14 +800,75 @@ footer {
 
 .congratulationsBanner {
   position: absolute;
-  top: 20vh;
   display: flex;
+  top: calc(50% - 108px);
   flex-direction: column;
   gap: 12px;
-  margin: 20vh 0;
   padding: 42px;
   height: fit-content;
   background-color: #fffcf5;
   border-radius: 20px;
   border: 1px solid #373375;
+}
+
+.spell_container {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border-radius: 12px;
+  background-color: #babde2;
+  padding: 42px;
+  width: 680px;
+  height: 380px;
+  margin-top: 24px;
+}
+
+.spell_container input {
+  border-radius: 8px;
+  border: 1px solid #373375;
+  color: #373375;
+  min-width: 420px;
+  height: 62px;
+  font-size: 21px;
+  text-align: center;
+}
+
+.spell_container input:focus {
+  outline: 1px solid #373375;
+}
+
+.spell_container a {
+  font-size: 14px;
+}
+
+.spell_container__buttons {
+  display: flex;
+  margin-top: 24px;
+  gap: 42px;
+}
+
+#spell_container__buttons__check {
+  background-color: #373375;
+  color: #fffcf5;
+  border-radius: 4px;
+  border: none;
+  padding: 8px 12px;
+  width: 124px;
+  height: 42px;
+}
+
+#spell_container__buttons__help {
+  background-color: #fffcf5;
+  border-radius: 4px;
+  border: 1px solid #373375;
+  color: #373375;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 124px;
+  height: 42px;
 }

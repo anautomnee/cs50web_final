@@ -370,8 +370,13 @@ def add_to_group(request):
 def match(request, module_id):
     current_user = User.objects.get(username=request.user.username)
     current_module = Module.objects.get(id=module_id)
-    cards = sorted(current_module.module_cards.all(), key=lambda x: random.random())
-    paginator = Paginator(cards, 5)
+    shuffled_list = list(current_module.module_cards.all())
+
+    # Use a deterministic seed based on the session key
+    seed = hash(request.session.session_key)
+    random.Random(seed).shuffle(shuffled_list)
+
+    paginator = Paginator(shuffled_list, 5)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
@@ -402,3 +407,35 @@ def collect(request):
         card = list(Card.objects.filter(definition=content, card_module=current_module).values())[0]
         return JsonResponse(card)
     return render(request, "learneasy/error.html")
+
+
+@login_required
+def spell(request, module_id):
+    current_user = User.objects.get(username=request.user.username)
+    current_module = Module.objects.get(id=module_id)
+    
+
+    shuffled_list = list(current_module.module_cards.all())
+
+    # Use a deterministic seed based on the session key
+    seed = hash(request.session.session_key)
+    random.Random(seed).shuffle(shuffled_list)
+
+
+    paginator = Paginator(shuffled_list, 1)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    
+    modules = current_user.user_modules.all()
+    texts = current_user.user_texts.all()
+    groups = current_user.user_groups.all()
+    lang = current_user.language
+
+    return render(request, "learneasy/spell.html", {
+        "module": current_module,
+        "modules": modules,
+        "texts": texts,
+        "groups": groups,
+        "lang": lang,
+        "page_obj": page_obj,
+    })
