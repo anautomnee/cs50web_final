@@ -219,23 +219,14 @@ window.addEventListener("DOMContentLoaded", () => {
     const spellInput = document.querySelector("#spellInput");
     const spellMessage = document.querySelector(".spell__message");
     const spellCorrect = document.querySelector("#spell__correct");
+    const spellSkip = document.querySelector('#spell__skip');
     spellCheckBtn.addEventListener('click', () => {
       const module_id = spellInput.classList[0];
       collectCard("definition", spellInput.nextElementSibling.textContent, module_id).then(data => {
         if (spellInput.value === data.term) {
           let page_num = spellContainer.classList[1];
-          if (page_num) {
-            setTimeout(() => window.location.replace(`${location.pathname}?page=${page_num}`), 600)
-            spellCorrect.hidden = false;
-          } else {
-            const parentDiv = spellMessage.parentElement;
-            parentDiv.textContent = "";
-            const buttons = createCongratulationsBanner(parentDiv)
-            buttons.backLink.setAttribute("href", `/module/${location.pathname.slice(-1)}`);
-            buttons.tryAgainBtn.setAttribute("href", `${location.pathname}?page=1`);
-          }
+          endGame(page_num, "spell", spellMessage.parentElement, spellCorrect);
         } else {
-          console.log(false)
           spellMessage.style.display = "flex";
         }
       })
@@ -255,6 +246,21 @@ window.addEventListener("DOMContentLoaded", () => {
         
       })
     });
+    spellSkip.addEventListener('click', () => {
+      let page_num = spellContainer.classList[1];
+      endGame(page_num, "spell", spellMessage.parentElement);
+    })
+  }
+
+
+  // Quiz
+  const quizBtnTrue = document.querySelector("#quiz__buttons__true");
+  if (quizBtnTrue) {
+    const quizBtnFalse = document.querySelector("#quiz__buttons__false");
+    quizBtnTrue.addEventListener('click', () => quizHandler("true"))
+    quizBtnFalse.addEventListener('click', () => quizHandler("false"))
+
+    
   }
 
 
@@ -527,14 +533,7 @@ function matchActivation(e, array, data, type) {
       // Check if container is empty
       if (match__message.nextElementSibling.children.length === 0) {
         const match_container = document.querySelector(".match_container")
-        if(match_container.classList[1]) {
-          window.location.replace(`${location.pathname}?page=${match_container.classList[1]}`)
-        } else {
-          const buttons = createCongratulationsBanner(match_container);
-          console.log(location.pathname.slice(-1))
-          buttons.backLink.setAttribute("href", `/module/${location.pathname.slice(-1)}`);
-          buttons.tryAgainBtn.setAttribute("href", `${location.pathname}?page=1`);
-        }
+        endGame(match_container.classList[1], "match");
       }
 
   } else {
@@ -588,4 +587,59 @@ function createCongratulationsBanner(parentDiv) {
     tryAgainBtn: tryAgainBtn,
     backLink: backLink
   };
+}
+
+function quizHandler(type) {
+  const quizTerm = document.querySelector("#quiz__term");
+  const quizDef = document.querySelector("#quiz__def");
+  const module_id = quizTerm.parentElement.classList[1];
+  const nextPage = quizTerm.previousElementSibling.classList[1];
+  collectCard("term", quizTerm.textContent, module_id).then(data => {
+    if (type === "true") {
+      if (data.definition === quizDef.textContent) {
+        const quizCorrect = document.querySelector("#quiz__correct");
+        endGame(nextPage, "quiz", quizTerm.parentElement, quizCorrect);
+      } else {
+        const quizIncorrect = document.querySelector("#quiz__incorrect");
+        endGame(nextPage, "quiz", quizTerm.parentElement, quizIncorrect);
+      }
+    } else {
+      if (data.definition !== quizDef.textContent) {
+        const quizCorrect = document.querySelector("#quiz__correct");
+        endGame(nextPage, "quiz", quizTerm.parentElement, quizCorrect)
+      } else {
+        const quizIncorrect = document.querySelector("#quiz__incorrect");
+        endGame(nextPage, "quiz", quizTerm.parentElement, quizIncorrect);
+      }
+    }
+  })
+}
+
+function endGame(nextPage, gameType, parentDiv, message) {
+  if (nextPage) {
+    if (gameType === "quiz" || gameType === "spell") {
+      if (message) {
+        setTimeout(() => window.location.replace(`${location.pathname}?page=${nextPage}`), 600);
+        message.hidden = false;
+      } else {
+        window.location.replace(`${location.pathname}?page=${nextPage}`);
+      }
+    } else {
+      window.location.replace(`${location.pathname}?page=${nextPage}`)
+    }
+  } else {
+    if (gameType === "quiz" || gameType === "spell") {
+        message.hidden = false;
+        setTimeout(() => {
+        parentDiv.textContent = "";
+        const buttons = createCongratulationsBanner(parentDiv);
+        buttons.backLink.setAttribute("href", location.pathname.slice(0,9));
+        buttons.tryAgainBtn.setAttribute("href", `${location.pathname}?page=1`);
+        }, 600);
+    } else {
+      const buttons = createCongratulationsBanner(parentDiv);
+      buttons.backLink.setAttribute("href", location.pathname.slice(0,9));
+      buttons.tryAgainBtn.setAttribute("href", `${location.pathname}?page=1`);
+    }
+  }
 }

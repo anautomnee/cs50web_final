@@ -811,7 +811,7 @@ footer {
   border: 1px solid #373375;
 }
 
-.spell_container {
+.spell_container, .quiz__container {
   display: flex;
   position: relative;
   flex-direction: column;
@@ -844,13 +844,13 @@ footer {
   font-size: 14px;
 }
 
-.spell_container__buttons {
+.spell_container__buttons, .quiz__buttons {
   display: flex;
   margin-top: 24px;
   gap: 42px;
 }
 
-#spell_container__buttons__check {
+#spell_container__buttons__check, #quiz__buttons__true, #quiz__buttons__false {
   background-color: #373375;
   color: #fffcf5;
   border-radius: 4px;
@@ -871,4 +871,16 @@ footer {
   gap: 8px;
   width: 124px;
   height: 42px;
+}
+
+#spell__skip {
+  cursor: pointer;
+}
+
+.quiz__main {
+  margin: 0 auto;
+}
+
+#quiz__term {
+  font-size: 36px;
 }

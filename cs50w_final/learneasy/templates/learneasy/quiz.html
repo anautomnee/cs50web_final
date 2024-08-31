@@ -1,0 +1,23 @@
+{% extends "learneasy/layout.html" %}
+{% load static %}
+
+{% block main %}
+    <div class="main quiz__main">
+        <h1>{{ module.module_name }}</h1>
+        <p>Decide if the term matches the definition</p>
+        <div class="quiz__container {{ module.id }}">
+            {% for card in page_obj %}
+                <div class="quiz__message {% if page_obj.has_next %}{{ page_obj.next_page_number }}{% endif %}">
+                    <h2 id="quiz__correct" hidden>Correct!</h2>
+                    <h2 id="quiz__incorrect" hidden>Incorrect!</h2>
+                </div>
+                <h1 id="quiz__term">{{ card.term }}</h1>
+                <p id="quiz__def">{{ defs|random }}</p>
+                <div class="quiz__buttons">
+                    <button id="quiz__buttons__false">False</button>
+                    <button id="quiz__buttons__true">True</button>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

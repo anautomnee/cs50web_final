@@ -172,6 +172,7 @@ def module(request, id):
     modules = current_user.user_modules.all()
     texts = current_user.user_texts.all()
     groups = current_user.user_groups.all()
+    random_list = ["match", "spell", "quiz"]
 
     return render(request, "learneasy/module.html", {
         "module": current_module,
@@ -181,7 +182,8 @@ def module(request, id):
         "cards": cards,
         "cards_count": cards_count,
         "page_obj": page_obj,
-        "lang": lang
+        "lang": lang,
+        "random_list": random_list
     })
 
 @login_required
@@ -438,4 +440,39 @@ def spell(request, module_id):
         "groups": groups,
         "lang": lang,
         "page_obj": page_obj,
+    })
+
+@login_required
+def quiz(request, module_id):
+    current_user = User.objects.get(username=request.user.username)
+    current_module = Module.objects.get(id=module_id)
+    
+
+    shuffled_list = list(current_module.module_cards.all())
+    defs = []
+    for card in shuffled_list:
+        defs.append(card.definition)
+
+    # Use a deterministic seed based on the session key
+    seed = hash(request.session.session_key)
+    random.Random(seed).shuffle(shuffled_list)
+
+
+    paginator = Paginator(shuffled_list, 1)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    
+    modules = current_user.user_modules.all()
+    texts = current_user.user_texts.all()
+    groups = current_user.user_groups.all()
+    lang = current_user.language
+
+    return render(request, "learneasy/quiz.html", {
+        "module": current_module,
+        "modules": modules,
+        "texts": texts,
+        "groups": groups,
+        "lang": lang,
+        "page_obj": page_obj,
+        "defs": defs
     })

@@ -40,8 +40,8 @@
                 <h2>Learn this module</h2>
                 <p><a href="{% url 'match' module.id %}">Match</a></p>
                 <p><a href="{% url 'spell' module.id %}">Spell</a></p>
-                <p>Quiz</p>
-                <p><img src="{% static 'learneasy/mdi_magic.png' %}" alt="surprise_icon"> Surprise me</p>
+                <p><a href="{% url 'quiz' module.id %}">Quiz</a></p>
+                <p><a href="/module/{{ module.id }}/{{ random_list|random }}"><img src="{% static 'learneasy/mdi_magic.png' %}" alt="surprise_icon"> Surprise me</a></p>
             </div>
         </div>
         <h1 id="module_cards_header">{{ cards_count }} cards in this module</h1>
