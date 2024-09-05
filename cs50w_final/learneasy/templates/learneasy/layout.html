@@ -27,6 +27,7 @@
             src="{% static 'learneasy/logo_learn_easy.png' %}"
             alt="logo_LearnEasy"
         /></a>
+        {% if modules %}
         <div class="layout_dropdown">
           <span>Modules</span>
           <div class="dropdown-content">
@@ -35,6 +36,8 @@
             {% endfor %}
           </div>
         </div>
+        {% endif %}
+        {% if texts %}
         <div class="layout_dropdown">
           <span>Texts</span>
           <div class="dropdown-content">
@@ -43,6 +46,8 @@
             {% endfor %}
           </div>
         </div>
+        {% endif %}
+        {% if groups %}
         <div class="layout_dropdown">
           <span>Groups</span>
           <div class="dropdown-content">
@@ -51,12 +56,13 @@
             {% endfor %}
           </div>
         </div>
+        {% endif %}
       </div>
       <div class="nav-right">
         {% if user.is_authenticated %}
         <div class="lang_container">
           <span>Learning </span>
-          <img src="/static/learneasy/{{ lang }}.svg" alt="german" />
+          <img src="/static/learneasy/{{ lang }}.svg" alt="de" />
         </div>
         <a href="{% url 'logout' %}">Log out</a>
         {% else %}
@@ -75,28 +81,28 @@
             <div class="change_lang_modal_icons_container">
               <img
                 class="change_lang_modal_icon change_lang_modal_selected"
-                src="{% static 'learneasy/english.svg' %}"
-                alt="english"
+                src="{% static 'learneasy/en.svg' %}"
+                alt="en"
               />
               <img
                 class="change_lang_modal_icon"
-                src="{% static 'learneasy/german.svg' %}"
-                alt="german"
+                src="{% static 'learneasy/de.svg' %}"
+                alt="de"
               />
               <img
                 class="change_lang_modal_icon"
-                src="{% static 'learneasy/spanish.svg' %}"
-                alt="spanish"
+                src="{% static 'learneasy/es.svg' %}"
+                alt="es"
               />
               <img
                 class="change_lang_modal_icon"
-                src="{% static 'learneasy/french.svg' %}"
-                alt="french"
+                src="{% static 'learneasy/fr.svg' %}"
+                alt="fr"
               />
               <img
                 class="change_lang_modal_icon"
-                src="{% static 'learneasy/italian.svg' %}"
-                alt="italian"
+                src="{% static 'learneasy/it.svg' %}"
+                alt="it"
               />
             </div>
             <input

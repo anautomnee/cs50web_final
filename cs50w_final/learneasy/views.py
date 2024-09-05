@@ -53,6 +53,27 @@ def register(request):
     if request.method == "POST":
         user_username = request.POST["register_username_input"]
         user_email = request.POST["register_email_input"]
+        # Check if username exists in system
+        try:
+            user = User.objects.get(username=user_username)
+            return render(request, "learneasy/register.html", {
+                "message": "Username taken",
+                "username": user_username,
+                "email": user_email
+            })
+        except:
+            pass
+
+        # Check if email exists in system
+        try:
+            user = User.objects.get(email=user_email)
+            return render(request, "learneasy/register.html", {
+                "message": "Email already exists in system",
+                "username": user_username,
+                "email": user_email
+            })
+        except:
+            pass
         user_password = request.POST["register_password_input"]
         user_confirmation_password = request.POST["register_password_confirmation_input"]
         user_lang = request.POST["register_lang_input"]
@@ -63,7 +84,9 @@ def register(request):
             return redirect("index")
         else:
             return render(request, "learneasy/register.html", {
-                "message": "Passwords must match."
+                "message": "Passwords must match.",
+                "username": user_username,
+                "email": user_email
             })    
     else:
         return render(request, "learneasy/register.html")
@@ -77,21 +100,38 @@ def add_module(request):
         new_module = ''
         new_term = ''
         new_def = ''
-        for key, value in request.POST.items():
-            if key != 'csrfmiddlewaretoken' and value:
-                if key == 'new_module_name':
-                    module_name = value
-                    new_module = Module(module_name=module_name, module_owner=current_user)
-                    new_module.save()
-                    continue
-                if key.startswith('term'):
-                    new_term = value
-                    continue
-                if key.startswith('def'):
-                    new_def = value
-                    new_card = Card(term=new_term, definition=new_def, card_module=new_module)
-                    new_card.save()
-        return redirect(f"module/{new_module.id}")
+        print(len(list(request.POST.items())))
+
+        if len(list(request.POST.items())) >= 8:
+            for key, value in request.POST.items():
+                if key != 'csrfmiddlewaretoken' and value:
+                    if key == 'new_module_name':
+                        module_name = value
+                        new_module = Module(module_name=module_name, module_owner=current_user)
+                        new_module.save()
+                        continue
+                    if key.startswith('term'):
+                        new_term = value
+                        continue
+                    if key.startswith('def'):
+                        new_def = value
+                        new_card = Card(term=new_term, definition=new_def, card_module=new_module)
+                        new_card.save()
+            return redirect(f"module/{new_module.id}")
+        else: 
+            modules = current_user.user_modules.all()
+            texts = current_user.user_texts.all()
+            groups = current_user.user_groups.all()
+            lang = current_user.language
+            message = "Module must contain at least two cards"
+            return render(request, "learneasy/add_module.html", {
+                "modules": modules,
+                "texts": texts,
+                "groups": groups,
+                "lang": lang,
+                "message": message,
+                "message_module_name": request.POST["new_module_name"]
+            })
             
     modules = current_user.user_modules.all()
     texts = current_user.user_texts.all()
@@ -162,7 +202,7 @@ def module(request, id):
     if current_module.module_owner.username != request.user.username:
         return render(request, "learneasy/error.html")
     
-    cards = current_module.module_cards.all()
+    cards = current_module.module_cards.all().order_by("id")
     cards_count = len(cards)
     paginator = Paginator(cards, 1)
     page_number = request.GET.get("page")
@@ -236,6 +276,9 @@ def group(request, id):
     texts = current_user.user_texts.all()
     groups = current_user.user_groups.all()
 
+    new_group_modules = modules.difference(group_modules)
+    new_group_texts = texts.difference(group_texts)
+
     return render(request, "learneasy/group.html", {
         "group": current_group,
         "group_modules": group_modules,
@@ -244,6 +287,8 @@ def group(request, id):
         "modules": modules,
         "texts": texts,
         "groups": groups,
+        "new_group_modules": new_group_modules,
+        "new_group_texts": new_group_texts
     })
 
 
@@ -295,19 +340,19 @@ def text(request, id):
 @login_required
 def translate(request):
     if request.method == "POST":
-        current_user = User.objects.get(username=request.user.username)
-        supported_langs = {
-            "english": "EN-GB",
-            "german": "DE",
-            "french": "FR",
-            "spanish": "ES",
-            "italian": "IT"
-        }
-        lang = current_user.language
+        # current_user = User.objects.get(username=request.user.username)
+        # supported_langs = {
+        #     "english": "EN-GB",
+        #     "german": "DE",
+        #     "french": "FR",
+        #     "spanish": "ES",
+        #     "italian": "IT"
+        # }
+        # lang = current_user.language
         auth_key = deepl_key
         data = json.loads(request.body)["text"]
         translator = deepl.Translator(auth_key)
-        result = translator.translate_text(data, target_lang=supported_langs[lang])
+        result = translator.translate_text(data, target_lang="EN-GB")
         return HttpResponse(result)
     
     return render(request, "learneasy/error.html")
@@ -318,7 +363,7 @@ def add_new_card(request):
         term = json.loads(request.body)["term"]
         definition = json.loads(request.body)["def"]
         module = json.loads(request.body)["module"]
-        current_module = Module.objects.get(module_name=module)
+        current_module = Module.objects.get(id=module)
         new_card = Card(term=term, definition=definition, card_module=current_module)
         new_card.save()
         try:
@@ -343,8 +388,8 @@ def change_lang(request):
 
 def add_to_group(request):
     if request.method == "POST":
-        group_name = request.POST["add_to_group_form_group_name"]
-        group = Group.objects.get(group_name=group_name)
+        group_id = request.POST["add_to_group_group_id"]
+        group = Group.objects.get(id=group_id)
         next = request.POST["add_to_group_form_next"]
         type = request.POST["add_to_group_form_type"]
 
@@ -352,7 +397,7 @@ def add_to_group(request):
             module_array = request.POST.getlist('add_to_module_group_select')
             print(module_array)
             for module in module_array:
-                current_module = Module.objects.get(module_name=module)
+                current_module = Module.objects.get(id=module)
                 current_module.module_group = group
                 current_module.save()
             return HttpResponseRedirect(next)
@@ -360,7 +405,7 @@ def add_to_group(request):
             text_array = request.POST.getlist('add_to_text_group_select')
             print(text_array)
             for text in text_array:
-                current_text = Text.objects.get(text_name=text)
+                current_text = Text.objects.get(id=text)
                 current_text.text_group = group
                 current_text.save()
             return HttpResponseRedirect(next)

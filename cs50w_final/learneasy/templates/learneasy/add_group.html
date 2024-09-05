@@ -10,6 +10,7 @@
         name="new_group_name"
         id="new_group_name"
         placeholder="E.g My new group"
+        required
       />
     </div>
     <div class="group_grid">
@@ -17,7 +18,7 @@
         <h2>Select modules</h2>
         <select name="user_modules_select" id="user_modules_select" multiple>
           {% for module in modules %}
-          <option value="{{ module.module_name }}">
+          <option value="{{ module.id }}">
             {{ module.module_name }}
           </option>
           {% endfor %}
@@ -31,7 +32,7 @@
           multiple
         >
           {% for text in texts %}
-          <option value="{{ text.text_name }}">{{ text.text_name }}</option>
+          <option value="{{ text.id }}">{{ text.text_name }}</option>
           {% endfor %}
         </select>
       </div>

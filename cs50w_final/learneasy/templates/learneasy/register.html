@@ -4,19 +4,21 @@
     {% csrf_token %}
     <h1>Register</h1>
     {% if message %}
-    <div>{{ message }}</div>
+    <div id="reg__message">{{ message }}</div>
     {% endif %}
     <input
       type="text"
       name="register_username_input"
       id="register_username_input"
       placeholder="Username"
+      value="{% if username %}{{ username }}{% endif %}"
     />
     <input
       type="email"
       name="register_email_input"
       id="register_email_input"
       placeholder="Email"
+      value="{% if email %}{{ email }}{% endif %}"
     />
     <input
       type="password"
@@ -40,28 +42,28 @@
       />
       <img
         class="register_lang_icon register_selected_lang"
-        src="{% static 'learneasy/english.svg' %}"
-        alt="english"
+        src="{% static 'learneasy/en.svg' %}"
+        alt="en"
       />
       <img
         class="register_lang_icon"
-        src="{% static 'learneasy/german.svg' %}"
-        alt="german"
+        src="{% static 'learneasy/de.svg' %}"
+        alt="de"
       />
       <img
         class="register_lang_icon"
-        src="{% static 'learneasy/spanish.svg' %}"
-        alt="spanish"
+        src="{% static 'learneasy/es.svg' %}"
+        alt="es"
       />
       <img
         class="register_lang_icon"
-        src="{% static 'learneasy/french.svg' %}"
-        alt="french"
+        src="{% static 'learneasy/fr.svg' %}"
+        alt="fr"
       />
       <img
         class="register_lang_icon"
-        src="{% static 'learneasy/italian.svg' %}"
-        alt="italian"
+        src="{% static 'learneasy/it.svg' %}"
+        alt="it"
       />
     </div>
     <input

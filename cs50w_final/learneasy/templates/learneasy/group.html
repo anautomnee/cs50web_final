@@ -10,6 +10,7 @@
         {% endfor %} {% else %}
         <p>No modules in this group yet</p>
         {% endif %}
+        {% if new_group_modules %}
         <button class="add_to_group_btn add_module_to_group {{ group.id }}">
           Add to group
         </button>
@@ -25,8 +26,8 @@
             id="add_to_module_group_select"
             multiple
           >
-            {% for module in modules %}
-            <option value="{{ module.module_name }}">
+            {% for module in new_group_modules %}
+            <option value="{{ module.id }}">
               {{ module.module_name }}
             </option>
             {% endfor %}
@@ -45,9 +46,9 @@
           />
           <input
             type="hidden"
-            name="add_to_group_form_group_name"
-            id="add_text_to_group_form_group_name"
-            value="{{ group.group_name }}"
+            name="add_to_group_group_id"
+            id="add_to_group_group_id"
+            value="{{ group.id }}"
           />
           <input
             type="submit"
@@ -57,6 +58,9 @@
             id="add_module_to_group_form_submit"
           />
         </form>
+        {% else %}
+        <p class="group__extraInfo">No modules to add</p>
+        {% endif %}
       </div>
     </div>
     <div>
@@ -67,6 +71,7 @@
         {% endfor %} {% else %}
         <p>No texts in this group yet</p>
         {% endif %}
+        {% if new_group_texts %}
         <button class="add_to_group_btn add_text_to_group {{ group.id }}">
           Add to group
         </button>
@@ -82,8 +87,8 @@
             id="add_to_text_group_select"
             multiple
           >
-            {% for text in texts %}
-            <option value="{{ text.text_name }}">{{ text.text_name }}</option>
+            {% for text in new_group_texts %}
+            <option value="{{ text.id }}">{{ text.text_name }}</option>
             {% endfor %}
           </select>
           <input
@@ -100,9 +105,9 @@
           />
           <input
             type="hidden"
-            name="add_to_group_form_group_name"
-            id="add_text_to_group_form_group_name"
-            value="{{ group.group_name }}"
+            name="add_to_group_group_id"
+            id="add_to_group_group_id"
+            value="{{ group.id }}"
           />
           <input
             type="submit"
@@ -112,6 +117,9 @@
             id="add_module_to_group_form_submit"
           />
         </form>
+        {% else %}
+        <p class="group__extraInfo">No texts to add</p>
+        {% endif %}
       </div>
     </div>
   </div>

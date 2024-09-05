@@ -12,6 +12,8 @@
           id="new_module_name"
           placeholder="E.g My new module"
           {% if cards %}value="{{ module_name }}"{% endif %}
+          {% if message %}value="{{ message_module_name }}"{% endif %}
+          required
         />
         {% if cards %}
           <button type="submit" class="add_submit_btn">Edit module</button>
@@ -20,7 +22,24 @@
         {% endif %}
       </div>
     </div>
+    <p>Pick an emoji for the module:</p>
+    <div class="module__emoji">
+      <input type="button" value="&#128214;" class="module__emoji__input emoji__active">
+      <input type="button" value="&#9997;" class="module__emoji__input">
+      <input type="button" value="&#127891;" class="module__emoji__input">
+      <input type="button" value="&#127979;" class="module__emoji__input">
+      <input type="button" value="&#9203;" class="module__emoji__input">
+      <input type="button" value="&#127775;" class="module__emoji__input">
+      <input type="button" value="&#127926;" class="module__emoji__input">
+      <input type="button" value="&#128187;" class="module__emoji__input">
+      <input type="button" value="&#127916;" class="module__emoji__input">
+      <input type="button" value="&#128212;" class="module__emoji__input">
+      <input type="button" value="&#128218;" class="module__emoji__input">
+      <input type="button" value="&#128211;" class="module__emoji__input">
+      <input type="button" value="&#128196;" class="module__emoji__input">
+    </div>
     <div class="new_module_cards_container">
+      {% if message %}{{ message }}{% endif %}
       {% if cards %} 
       {% for card in cards %}
       <div class="new_module_card_container">

@@ -10,12 +10,12 @@
       <select name="text_modules_select" id="text_modules_select">
         <option value="">--Please choose a module--</option>
         {% for module in modules %}
-        <option value="{{ module.module_name }}">
+        <option value="{{ module.id }}">
           {{ module.module_name }}
         </option>
         {% endfor %}
       </select>
-      <div class="added_cards_container"></div>
+      <div lang="{{ lang }}" class="added_cards_container"></div>
       <div class="added_cards_btn_container"></div>
     </div>
   </div>

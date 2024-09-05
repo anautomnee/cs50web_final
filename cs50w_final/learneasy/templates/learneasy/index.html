@@ -4,14 +4,14 @@
     <div class="recent-modules-grid">
       <a href="{% url 'add_module' %}">
         <div class="module-small-card">
-          <div></div>
+          <div class="index__create"></div>
           <h3>Create a module</h3>
         </div>
       </a>
       {% for module in preview_modules %}
       <a href="{% url 'module' module.id %}">
         <div class="module-small-card">
-          <div></div>
+          <div>{{ module.module_emoji|safe }}</div>
           <h3>
             <p class="recent-module-name">{{ module.module_name }}</p>
           </h3>
@@ -23,14 +23,14 @@
     <div class="recent-texts-grid">
       <a href="{% url 'add_text' %}">
         <div class="module-small-card">
-          <div></div>
+          <div class="index__create"></div>
           <h3>Create a text</h3>
         </div>
       </a>
       {% for text in preview_texts %}
       <a href="{% url 'text' text.id %}">
         <div class="module-small-card">
-          <div></div>
+          <div>{{ text.text_emoji|safe }}</div>
           <h3>
             <p class="recent-module-name">{{ text.text_name }}</p>
           </h3>
@@ -46,14 +46,14 @@
       <div class="groups_main">
         <a href="{% url 'add_group' %}">
           <div class="group-card">
-            <div></div>
+            <div class="index__create"></div>
             <h3>Create a group</h3>
           </div>
         </a>
         {% for group in groups %}
         <a href="{% url 'group' group.id %}">
           <div class="group-card">
-            <div></div>
+            <div>{{ group.group_emoji|safe }}</div>
             <h3 class="recent-group-name">{{ group.group_name }}</h3>
           </div>
         </a>

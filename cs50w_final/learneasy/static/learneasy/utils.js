@@ -32,9 +32,11 @@ window.addEventListener("DOMContentLoaded", () => {
         console.log("check");
         flip_card_inner.classList.remove("rotated");
         flip_card_inner.style.transform = "rotateX(0deg)";
+      } else {
+
+        flip_card_inner.style.transform = "rotateX(180deg)";
+        flip_card_inner.classList.toggle("rotated");
       }
-      flip_card_inner.style.transform = "rotateX(180deg)";
-      flip_card_inner.classList.toggle("rotated");
     });
   }
 
@@ -53,19 +55,30 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const text_content = document.querySelector(".text_content");
   if (text_content) {
-    const textArray = text_content.textContent.split(" ");
+    // Split into sentences
+    const paragraphsArray = text_content.textContent.split('\n\n');
     text_content.textContent = "";
-    textArray.forEach((el, ind) => {
-      const wordSpan = document.createElement("span");
-      wordSpan.classList.add("translatable_item");
-      wordSpan.textContent = el;
-      text_content.append(wordSpan);
-      if (ind !== textArray.length - 1) {
-        const spaceSpan = document.createElement("span");
-        spaceSpan.textContent = " ";
-        text_content.append(spaceSpan);
+    paragraphsArray.forEach(par => {
+      const parDiv = document.createElement("div");
+      parDiv.style.marginBottom = "18px";
+      const sentencesArray = par.match( /[^\.!\?]+[\.!\?]+/g );
+      if(sentencesArray) {
+        sentencesArray.forEach(sentence => {
+          const sentenceSpan = document.createElement("span");
+          parDiv.append(sentenceSpan);
+          const wordsArray = sentence.split(/(\s+)/);
+          wordsArray.forEach(word => {
+            const wordSpan = document.createElement("span");
+            if (/[a-zA-Z]/g.test(word)) {
+              wordSpan.classList.add("translatable_item");
+            }
+            wordSpan.textContent = word;
+            sentenceSpan.append(wordSpan);
+          });
+        });
       }
-    });
+      text_content.append(parDiv);
+    })
   }
 
   // Words translation popover
@@ -131,7 +144,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // Change lang selected at register
   const register_lang_icons = document.querySelectorAll(".register_lang_icon");
   const register_lang_input = document.querySelector("#register_lang_input");
-  let selected_lang = "english";
+  let selected_lang = "en";
   if (register_lang_icons) {
     for (icon of register_lang_icons) {
       icon.addEventListener("click", (e) => {
@@ -259,8 +272,20 @@ window.addEventListener("DOMContentLoaded", () => {
     const quizBtnFalse = document.querySelector("#quiz__buttons__false");
     quizBtnTrue.addEventListener('click', () => quizHandler("true"))
     quizBtnFalse.addEventListener('click', () => quizHandler("false"))
+  }
 
-    
+
+
+  // Emoji
+  // New module
+  const moduleEmojis = document.querySelectorAll('.module__emoji__input');
+  if (moduleEmojis) {
+    moduleEmojis.forEach(emoji => {
+      emoji.addEventListener('click', (e) => {
+        moduleEmojis.forEach(el => el.classList.remove('emoji__active'));
+        e.target.classList.add('emoji__active');
+      })
+    })
   }
 
 
@@ -325,17 +350,18 @@ function autogrow_textarea() {
 
 function create_mini_card(parentDiv, term, def) {
   const mini_card_container = document.createElement("div");
-  const term_par = document.createElement("p");
-  const def_par = document.createElement("p");
-  const divider = document.createElement("p");
+  const term_par = document.createElement("div");
+  const def_par = document.createElement("div");
 
   parentDiv.append(mini_card_container);
   mini_card_container.classList.add("mini_card_container");
-  mini_card_container.append(term_par, divider, def_par);
+  mini_card_container.append(term_par,def_par);
 
   term_par.textContent = term;
+  term_par.setAttribute("lang", parentDiv.getAttribute("lang"));
   def_par.textContent = def;
-  divider.innerHTML = "—————";
+  def_par.setAttribute("lang", parentDiv.getAttribute("lang"));
+  def_par.style.textAlign = "center";
 }
 
 function deleteCard(icon) {
@@ -454,8 +480,13 @@ function addMiniCardFromText(popover, text, translation, mini_cards) {
         const added_note = document.createElement("span");
         added_note.classList.add("added_note");
         added_note.textContent = "Cards successfully added";
-        added_cards_btn_container.append(added_note);
-        add_card_btn.disabled = true;
+        const added_link = document.createElement("a");
+        added_link.textContent = "Go to module";
+        added_link.style.textDecoration = "underline";
+        added_link.style.fontWeight = "600";
+        added_link.setAttribute("href", `/module/${text_modules_select.value}`)
+        added_cards_btn_container.append(added_note, added_link);
+        add_card_btn.hidden = true;
         mini_cards.length = 0;
         console.log(mini_cards);
       } catch (error) {
