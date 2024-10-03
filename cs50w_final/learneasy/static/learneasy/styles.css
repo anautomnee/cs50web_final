@@ -921,7 +921,7 @@ footer {
   margin-top: 12px;
 }
 
-.module__emoji input {
+.module__emoji input, .module__emoji button {
   font-size: 36px;
   width: 44px;
   height: 44px;

@@ -280,10 +280,20 @@ window.addEventListener("DOMContentLoaded", () => {
   // New module
   const moduleEmojis = document.querySelectorAll('.module__emoji__input');
   if (moduleEmojis) {
+    const emojiiInput = document.querySelector('#module_emoji');
+    const emojiActive = document.querySelector('.emoji__active');
+    if(!emojiActive) {
+      moduleEmojis.forEach(emoji => {
+        if (emoji.textContent === emojiiInput.value) {
+          emoji.classList.add('emoji__active');
+        }
+      })
+    }
     moduleEmojis.forEach(emoji => {
       emoji.addEventListener('click', (e) => {
         moduleEmojis.forEach(el => el.classList.remove('emoji__active'));
         e.target.classList.add('emoji__active');
+        emojiiInput.value = e.target.textContent;
       })
     })
   }
@@ -564,7 +574,7 @@ function matchActivation(e, array, data, type) {
       // Check if container is empty
       if (match__message.nextElementSibling.children.length === 0) {
         const match_container = document.querySelector(".match_container")
-        endGame(match_container.classList[1], "match");
+        endGame(match_container.classList[1], "match", match_container);
       }
 
   } else {
@@ -659,17 +669,19 @@ function endGame(nextPage, gameType, parentDiv, message) {
       window.location.replace(`${location.pathname}?page=${nextPage}`)
     }
   } else {
+    const pathArray = location.pathname.split('/');
     if (gameType === "quiz" || gameType === "spell") {
         message.hidden = false;
         setTimeout(() => {
         parentDiv.textContent = "";
         const buttons = createCongratulationsBanner(parentDiv);
-        buttons.backLink.setAttribute("href", location.pathname.slice(0,9));
+        buttons.backLink.setAttribute("href", `/module/${pathArray[2]}`);
         buttons.tryAgainBtn.setAttribute("href", `${location.pathname}?page=1`);
         }, 600);
     } else {
       const buttons = createCongratulationsBanner(parentDiv);
-      buttons.backLink.setAttribute("href", location.pathname.slice(0,9));
+      console.log(pathArray[1])
+      buttons.backLink.setAttribute("href", `/module/${pathArray[2]}`);
       buttons.tryAgainBtn.setAttribute("href", `${location.pathname}?page=1`);
     }
   }

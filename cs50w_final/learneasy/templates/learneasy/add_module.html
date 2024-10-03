@@ -24,19 +24,20 @@
     </div>
     <p>Pick an emoji for the module:</p>
     <div class="module__emoji">
-      <input type="button" value="&#128214;" class="module__emoji__input emoji__active">
-      <input type="button" value="&#9997;" class="module__emoji__input">
-      <input type="button" value="&#127891;" class="module__emoji__input">
-      <input type="button" value="&#127979;" class="module__emoji__input">
-      <input type="button" value="&#9203;" class="module__emoji__input">
-      <input type="button" value="&#127775;" class="module__emoji__input">
-      <input type="button" value="&#127926;" class="module__emoji__input">
-      <input type="button" value="&#128187;" class="module__emoji__input">
-      <input type="button" value="&#127916;" class="module__emoji__input">
-      <input type="button" value="&#128212;" class="module__emoji__input">
-      <input type="button" value="&#128218;" class="module__emoji__input">
-      <input type="button" value="&#128211;" class="module__emoji__input">
-      <input type="button" value="&#128196;" class="module__emoji__input">
+      <input type="hidden" value="{% if cards %}{{module_emoji}}{% else %}&#128214;{% endif %}" class="module__emoji__input" id="module_emoji" name="module_emoji">
+      <button type="button" class="module__emoji__input {% if not cards %}emoji__active{% endif %}">&#128214;</button>
+      <button type="button" class="module__emoji__input">&#127891;</button>
+      <button type="button" class="module__emoji__input">&#127979;</button>
+      <button type="button" class="module__emoji__input">&#9997;</button>
+      <button type="button" class="module__emoji__input">&#9203;</button>
+      <button type="button" class="module__emoji__input">&#127775;</button>
+      <button type="button" class="module__emoji__input">&#127926;</button>
+      <button type="button" class="module__emoji__input">&#128187;</button>
+      <button type="button" class="module__emoji__input">&#127916;</button>
+      <button type="button" class="module__emoji__input">&#128212;</button>
+      <button type="button" class="module__emoji__input">&#128218;</button>
+      <button type="button" class="module__emoji__input">&#128211;</button>
+      <button type="button" class="module__emoji__input">&#128196;</button>
     </div>
     <div class="new_module_cards_container">
       {% if message %}{{ message }}{% endif %}
@@ -130,34 +131,7 @@
           />
         </svg>
       </div>
-      <div class="new_module_card_container">
-        <div class="textareas_container">
-          <div class="term">
-            <textarea id="term3" name="term3"></textarea>
-            <label for="term3">Term</label>
-          </div>
-          <div class="definition">
-            <textarea
-              id="definition3"
-              name="definition3"
-              class="definition_texarea"
-            ></textarea>
-            <label for="definition3">Definition</label>
-          </div>
-        </div>
-        <svg
-          class="delete_card_icon"
-          xmlns="http://www.w3.org/2000/svg"
-          height="24px"
-          viewBox="0 -960 960 960"
-          width="24px"
-          fill="#FFFFFF"
-        >
-          <path
-            d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"
-          />
-        </svg>
-      </div>
+      
       {% endif %}
       <div class="add_card_container">
         <svg

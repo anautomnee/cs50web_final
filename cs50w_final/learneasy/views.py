@@ -100,9 +100,13 @@ def add_module(request):
         new_module = ''
         new_term = ''
         new_def = ''
-        print(len(list(request.POST.items())))
+        module_emoji = ''
+        key_empty_flag = False
+        for key, value in request.POST.items():
+            if not value:
+                key_empty_flag = True
 
-        if len(list(request.POST.items())) >= 8:
+        if not key_empty_flag:
             for key, value in request.POST.items():
                 if key != 'csrfmiddlewaretoken' and value:
                     if key == 'new_module_name':
@@ -110,20 +114,26 @@ def add_module(request):
                         new_module = Module(module_name=module_name, module_owner=current_user)
                         new_module.save()
                         continue
+                    if key == 'module_emoji':
+                        module_emoji = value
+                        new_module.module_emoji = module_emoji
+                        new_module.save(update_fields=["module_emoji"])
+                        continue
                     if key.startswith('term'):
                         new_term = value
                         continue
                     if key.startswith('def'):
-                        new_def = value
-                        new_card = Card(term=new_term, definition=new_def, card_module=new_module)
-                        new_card.save()
+                        if value and new_term:
+                            new_def = value
+                            new_card = Card(term=new_term, definition=new_def, card_module=new_module)
+                            new_card.save()
             return redirect(f"module/{new_module.id}")
         else: 
             modules = current_user.user_modules.all()
             texts = current_user.user_texts.all()
             groups = current_user.user_groups.all()
             lang = current_user.language
-            message = "Module must contain at least two cards"
+            message = "Module must contain at least two full cards"
             return render(request, "learneasy/add_module.html", {
                 "modules": modules,
                 "texts": texts,
@@ -148,6 +158,7 @@ def edit_module(request, id):
     current_module = Module.objects.get(id=id)
     current_user = User.objects.get(username=request.user.username)
     module_id = current_module.id
+    module_emoji = current_module.module_emoji
     if request.method == "POST":
         new_term = ''
         new_def = ''
@@ -157,6 +168,10 @@ def edit_module(request, id):
                     current_module.module_name = value
                     current_module.save(update_fields=["module_name"])
                     continue
+                if key == 'module_emoji':
+                        current_module.module_emoji = value
+                        current_module.save(update_fields=["module_emoji"])
+                        continue
                 if key.startswith('term'):
                     id=key[4:]
                     try:
@@ -192,7 +207,8 @@ def edit_module(request, id):
         "lang": lang, 
         "cards": cards,
         "module_id": module_id,
-        "module_name": current_module.module_name
+        "module_name": current_module.module_name,
+        "module_emoji": module_emoji
     })
 
 @login_required
@@ -237,14 +253,14 @@ def add_group(request):
         # Add modules
         module_array = request.POST.getlist('user_modules_select')
         for module in module_array:
-            current_module = Module.objects.get(module_name=module)
+            current_module = Module.objects.get(id=module)
             current_module.module_group = new_group
             current_module.save()
 
         # Add texts
         text_array = request.POST.getlist('new_group_texts_select')
         for text in text_array:
-            current_text = Text.objects.get(text_name=text)
+            current_text = Text.objects.get(id=text)
             current_text.text_group = new_group
             current_text.save()
 
