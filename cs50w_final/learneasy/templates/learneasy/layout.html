@@ -108,27 +108,27 @@
             {% csrf_token %}
             <div class="change_lang_modal_icons_container">
               <img
-                class="change_lang_modal_icon change_lang_modal_selected"
+                class="change_lang_modal_icon {% if lang == 'en' %}change_lang_modal_selected{% endif %}"
                 src="{% static 'learneasy/en.svg' %}"
                 alt="en"
               />
               <img
-                class="change_lang_modal_icon"
+                class="change_lang_modal_icon {% if lang == 'de' %}change_lang_modal_selected{% endif %}"
                 src="{% static 'learneasy/de.svg' %}"
                 alt="de"
               />
               <img
-                class="change_lang_modal_icon"
+                class="change_lang_modal_icon {% if lang == 'es' %}change_lang_modal_selected{% endif %}"
                 src="{% static 'learneasy/es.svg' %}"
                 alt="es"
               />
               <img
-                class="change_lang_modal_icon"
+                class="change_lang_modal_icon {% if lang == 'fr' %}change_lang_modal_selected{% endif %}"
                 src="{% static 'learneasy/fr.svg' %}"
                 alt="fr"
               />
               <img
-                class="change_lang_modal_icon"
+                class="change_lang_modal_icon {% if lang == 'it' %}change_lang_modal_selected{% endif %}"
                 src="{% static 'learneasy/it.svg' %}"
                 alt="it"
               />
