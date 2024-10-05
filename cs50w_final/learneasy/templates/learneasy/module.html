@@ -38,10 +38,21 @@
             </div>
             <div class="learn_types_container">
                 <h2>Learn this module</h2>
-                <p><a href="{% url 'match' module.id %}">Match</a></p>
-                <p><a href="{% url 'spell' module.id %}">Spell</a></p>
-                <p><a href="{% url 'quiz' module.id %}">Quiz</a></p>
-                <p><a href="/module/{{ module.id }}/{{ random_list|random }}"><img src="{% static 'learneasy/mdi_magic.png' %}" alt="surprise_icon"> Surprise me</a></p>
+                <div>
+                    <div class="learn_types__1">
+                        <p><a href="{% url 'match' module.id %}">Match</a></p>
+                        <p><a href="{% url 'spell' module.id %}">Spell</a></p>
+                    </div>
+                    <div class="learn_types__2">
+                        <p><a href="{% url 'quiz' module.id %}">Quiz</a></p>
+                        <a href="/module/{{ module.id }}/{{ random_list|random }}">
+                            <div id="surprise__container">
+                                <img src="{% static 'learneasy/mdi_magic.png' %}" alt="surprise_icon"> 
+                                <p>Surprise me</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
         <h1 id="module_cards_header">{{ cards_count }} cards in this module</h1>
@@ -59,6 +70,14 @@
                         <h2>{{ card.definition }}</h2>
                     </div>
                 </div>
+            {% endfor %}
+        </div>
+        <div class="module_minicards_container">
+            {% for card in cards %}
+            <div class="module_minicard_container">
+                <h1>{{ card.term }}</h1>
+                <h2>{{ card.definition }}</h2>
+            </div>
             {% endfor %}
         </div>
     </div>
