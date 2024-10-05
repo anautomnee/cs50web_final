@@ -29,7 +29,6 @@ window.addEventListener("DOMContentLoaded", () => {
     const flip_card_inner = document.querySelector(".flip_card_inner");
     flip_card.addEventListener("click", () => {
       if (flip_card_inner.classList.contains("rotated")) {
-        console.log("check");
         flip_card_inner.classList.remove("rotated");
         flip_card_inner.style.transform = "rotateX(0deg)";
       } else {
@@ -298,6 +297,15 @@ window.addEventListener("DOMContentLoaded", () => {
     })
   }
 
+  // Curtain
+  const menuBurger = document.querySelector("#layout_menu");
+  if(menuBurger) {
+    const curtainMenu = document.querySelector("#curtain_menu");
+    const curtainMenuClose = document.querySelector("#curtain_menu__close");
+    menuBurger.addEventListener('click', () => curtainMenu.style.left = "0px")
+    curtainMenuClose.addEventListener('click', () => curtainMenu.style.left = "-240px")
+  }
+
 
 });
 
@@ -380,7 +388,6 @@ function deleteCard(icon) {
     icon.previousElementSibling.firstElementChild.firstElementChild;
   const textarea_def =
     icon.previousElementSibling.lastElementChild.firstElementChild;
-  console.log(icon.previousElementSibling);
   icon.previousElementSibling.style.height = "0px";
   textarea_term.style.height = "0px";
   textarea_term.style.border = "none";
@@ -396,7 +403,6 @@ function deleteCard(icon) {
 }
 
 function scrollBlurGroups(container, left, right) {
-  console.log(container.scrollLeft);
   if (container.scrollLeft > 205) {
     right.hidden = true;
   } else if (container.scrollLeft > 5 && container.scrollLeft < 205) {
@@ -498,7 +504,6 @@ function addMiniCardFromText(popover, text, translation, mini_cards) {
         added_cards_btn_container.append(added_note, added_link);
         add_card_btn.hidden = true;
         mini_cards.length = 0;
-        console.log(mini_cards);
       } catch (error) {
         console.log(error);
       }
@@ -680,7 +685,6 @@ function endGame(nextPage, gameType, parentDiv, message) {
         }, 600);
     } else {
       const buttons = createCongratulationsBanner(parentDiv);
-      console.log(pathArray[1])
       buttons.backLink.setAttribute("href", `/module/${pathArray[2]}`);
       buttons.tryAgainBtn.setAttribute("href", `${location.pathname}?page=1`);
     }

@@ -22,8 +22,35 @@
   <body>
     <nav>
       <div class="nav-left">
+        <svg id="layout_menu" xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#373375"><path d="M144-264v-72h672v72H144Zm0-180v-72h672v72H144Zm0-180v-72h672v72H144Z"/></svg>
+        <div id="curtain_menu">
+          <div id="curtain_menu__container">
+            <ul>
+              <li>Modules</li>
+              <ul id="curtain_menu__modules">
+                {% for module in modules %}
+                <li><a href="{% url 'module' module.id %}">{{ module.module_name }}</a></li>
+                {% endfor %}
+              </ul>
+              <li>Texts</li>
+              <ul id="curtain_menu__texts">
+                {% for text in texts %}
+                <li><a href="{% url 'text' text.id %}">{{ text.text_name }}</a></li>
+                {% endfor %}
+              </ul>
+              <li>Groups</li>
+              <ul id="curtain_menu__groups">
+                {% for group in groups %}
+                <li><a href="{% url 'group' group.id %}">{{ group.group_name }}</a></li>
+                {% endfor %}
+              </ul>
+            </ul>
+            <svg id="curtain_menu__close" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+          </div>
+        </div>
         <a href="{% url 'index' %}"
           ><img
+            id="layout_logo"
             src="{% static 'learneasy/logo_learn_easy.png' %}"
             alt="logo_LearnEasy"
         /></a>
@@ -61,10 +88,11 @@
       <div class="nav-right">
         {% if user.is_authenticated %}
         <div class="lang_container">
-          <span>Learning </span>
+          <span id="layout_lang_title">Learning </span>
           <img src="/static/learneasy/{{ lang }}.svg" alt="de" />
         </div>
-        <a href="{% url 'logout' %}">Log out</a>
+        <a href="{% url 'logout' %}" id="nav_logout_text">Log out</a>
+        <a href="{% url 'logout' %}" id="nav_logout_icon"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#373375"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg></a>
         {% else %}
         <a href="{% url 'login' %}">Log in</a>
         <a href="{% url 'register' %}">Register</a>
