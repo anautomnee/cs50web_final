@@ -1122,12 +1122,19 @@ footer {
     margin-right: 12px;
   }
 
-  /* MATCH */
+  /* GAMES */
   .match_container {
     padding: 24px;
   }
   .match_container .module_card_container {
     height: 90px;
+  }
+  .spell_container, .quiz__container {
+    width: 80vw;
+    height: 320px;
+  }
+  .spell_container input {
+    min-width: 380px;
   }
 
 }
@@ -1168,8 +1175,30 @@ footer {
   .text_name_field {
     width: 320px;
   }
+
+  /* GAMES */
+
   .match_container .module_card_container {
     width: 36vw;
+  }
+  .quiz__main {
+    margin: 0 auto;
+  }
+  .spell_container, .quiz__container {
+    width: 84vw;
+    height: 280px;
+  }
+  .quiz__buttons {
+    gap: 12px;
+  }
+  #quiz__buttons__false, #quiz__buttons__true {
+    width: 100px;
+  }
+  .quiz__main h1, .quiz__main p {
+    max-width: 340px;
+  }
+  .spell_container input {
+    min-width: 320px;
   }
 }
 
@@ -1197,6 +1226,9 @@ footer {
     align-items: flex-start;
     gap: 18px;
   }
+
+  /* GAMES */
+
   .match_container .module_card_container {
     width: 120px;
     height: 60px;
@@ -1204,6 +1236,20 @@ footer {
   .match_container {
     padding: 24px 12px;
     gap: 8px;
+  }
+  .quiz__container {
+    width: 90vw;
+    height: 320px;
+  }
+  .spell_container, .quiz__container {
+    width: 84vw;
+    height: 320px;
+  }
+  .spell_container input {
+    min-width: 260px;
+  }
+  .spell_container__buttons {
+    gap: 12px;
   }
 
 }
