@@ -106,7 +106,7 @@ window.addEventListener("DOMContentLoaded", () => {
             module_selected_for_translation,
             mini_cards_from_text
           );
-          popover.style.top = `${rect.bottom}px`;
+          popover.style.top = `${rect.bottom + window.scrollY}px`;
           popover.style.left = `${rect.right}px`;
         } else {
           const popover = createPopover(

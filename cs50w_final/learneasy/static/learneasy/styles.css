@@ -97,6 +97,7 @@ nav {
 }
 #layout_menu {
   display: none;
+  cursor: pointer;
 }
 #curtain_menu {
   position: absolute;
@@ -408,6 +409,7 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: end;
+  gap: 24px;
 }
 
 .new_module_name input,
@@ -989,6 +991,10 @@ footer {
   padding: 8px;
   margin-bottom: 24px;
   margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  width: fit-content;
+  flex-wrap: wrap;
 }
 
 .module__emoji input, .module__emoji button {
@@ -1015,6 +1021,25 @@ footer {
 
   .module_top {
     gap: 60px;
+  }
+
+  .form_textarea {
+    width: 680px;
+  }
+  .right_text_container {
+    min-width: 320px;
+  }
+  #text_modules_select {
+    max-width: 270px;
+  }
+
+  /* MATCH */
+  .match_container {
+    width: 86vw;
+    gap: 18px;
+  }
+  .match_container .module_card_container {
+    width: 36vw;
   }
 }
 
@@ -1051,6 +1076,8 @@ footer {
     gap: 16px;
   }
 
+  /* MODULE */
+
   .module_top {
     flex-direction: column;
   }
@@ -1066,6 +1093,43 @@ footer {
   .module_cards_container {
     display: none;
   }
+
+  /* TEXT */
+  .form_textarea {
+    width: 520px;
+    height: 320px;
+  }
+  .text_container {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0;
+  }
+
+  /* NEW MODULE */
+  .new_module_card_container {
+    padding: 24px 18px;
+    height: fit-content;
+  }
+  .textareas_container {
+    gap: 14px;
+    flex-direction: column;
+  }
+  .term,
+  .definition {
+    width: 90%;
+  }
+  .new_module_card_container svg {
+    margin-right: 12px;
+  }
+
+  /* MATCH */
+  .match_container {
+    padding: 24px;
+  }
+  .match_container .module_card_container {
+    height: 90px;
+  }
+
 }
 
 @media screen and (max-width: 600px) {
@@ -1096,4 +1160,50 @@ footer {
   .change_lang_modal .change_lang_modal_inner {
     width: 320px;
   }
+
+  /* ADD_TEXT */
+  .form_textarea {
+    width: 320px;
+  }
+  .text_name_field {
+    width: 320px;
+  }
+  .match_container .module_card_container {
+    width: 36vw;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  #text_modules_select {
+    max-width: 240px;
+  }
+  .right_text_container {
+    min-width: 280px;
+  }
+  .group_grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .new_module_name input,
+  .new_group_name input,
+  .new_text_name input {
+    width: 280px;
+  }
+  .new_module_name div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 18px;
+  }
+  .match_container .module_card_container {
+    width: 120px;
+    height: 60px;
+  }
+  .match_container {
+    padding: 24px 12px;
+    gap: 8px;
+  }
+
 }
