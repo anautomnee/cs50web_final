@@ -1,0 +1,1 @@
+deepl_key = "2592dfd8-3254-4663-bfc7-8b6f705b9f21:fx"
